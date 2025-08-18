@@ -1,39 +1,21 @@
-import { NextResponse } from 'next/server'
-import { decrypt } from '@/app/lib/session'
-import { cookies } from 'next/headers'
+import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-// 1. Specify protected and public routes
-const protectedRoutes = ['/dashboard']
-const publicRoutes = ['/login', '/signup', '/']
+export async function middleware(req) {
+  const token = req.headers.get("authorization")?.split(" ")[1]; // "Bearer <token>"
 
-export default async function middleware(req) {
-    // 2. Check if the current route is protected or public
-    const path = req.nextUrl.pathname
-    const isProtectedRoute = protectedRoutes.includes(path)
-    const isPublicRoute = publicRoutes.includes(path)
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-    // 3. Decrypt the session from the cookie
-    const cookie = (await cookies()).get('session')?.value
-    const session = await decrypt(cookie)
-
-    // 5. Redirect to /login if the user is not authenticated
-    if (isProtectedRoute && !session?.userId) {
-        return NextResponse.redirect(new URL('/login', req.nextUrl))
-    }
-
-    // 6. Redirect to /dashboard if the user is authenticated
-    if (
-        isPublicRoute &&
-        session?.userId &&
-        !req.nextUrl.pathname.startsWith('/dashboard')
-    ) {
-        return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
-    }
-
-    return NextResponse.next()
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    return NextResponse.next();
+  } catch {
+    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+  }
 }
 
-// Routes Middleware should not run on
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
-}
+  matcher: ["/api/protected/:path*"], // alle geschützten Routen
+};

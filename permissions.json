@@ -1,0 +1,12 @@
+{
+    "users": [
+        "create",
+        "update",
+        "delete"
+    ],
+    "roles": [
+        "create",
+        "update",
+        "delete"
+    ]
+}

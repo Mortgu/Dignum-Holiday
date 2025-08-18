@@ -11,7 +11,6 @@ export async function login(state, formData) {
     const { email, password } = formData;
     
     const hashedPassword = await bcrypt.hash(password, 10);
-
 }
 
 export async function signup(state, formData) {
