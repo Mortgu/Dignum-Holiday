@@ -2,20 +2,22 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 export async function middleware(req) {
-  const token = req.headers.get("authorization")?.split(" ")[1]; // "Bearer <token>"
+    const token = req.headers.get("authorization")?.split(" ")[1];
 
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+    if (!token) {
+        return NextResponse.json({error: "Unauthorized"}, {
+            status: 401
+        });
+    }
 
-  try {
-    jwt.verify(token, process.env.JWT_SECRET);
-    return NextResponse.next();
-  } catch {
-    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-  }
+    try {
+        jwt.verify(token, process.env.JWT_SECRET);
+        return NextResponse.next();
+    } catch {
+        return NextResponse.json({error: "Invalid token"}, {status: 401});
+    }
 }
 
 export const config = {
-  matcher: ["/api/protected/:path*"], // alle geschützten Routen
+    matcher: ["/api/protected/:path*"],
 };
