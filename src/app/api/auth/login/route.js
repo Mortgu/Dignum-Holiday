@@ -10,15 +10,16 @@ const mockUsers = [
 export async function POST(request) {
     const { username, password } = await request.json();
 
-    const user2 = client.query("SELECT * FROM users WHERE name=$1", [username]);
-    console.log(user2);
-    const user = mockUsers.find(u => u.username === username);
+    const matches = await client.query("SELECT * FROM users WHERE name=$1", [username]);
 
-    if (!user) {
+    //const user = mockUsers.find(u => u.username === username);
+
+    if (matches.rowCount === 0) {
         return NextResponse.json({
             error: 'User dose not exists!'
         }, { status: 401 });
     }
+    const user = matches.rows[0];
 
     const isPasswordValid = await compare(password, user.password);
 
@@ -29,7 +30,7 @@ export async function POST(request) {
     }
 
     const token = jsonwebtoken.sign(
-        { uid: user.id, username: user.username },
+        { uid: user.id, username: user.name },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN }
     )
