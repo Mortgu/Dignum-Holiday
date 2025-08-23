@@ -1,32 +1,20 @@
-"use client";
+import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { useEffect, useState } from "react";
+export default async function DashboardPage(request) {
+    const headersList = await headers();
+    const token = parseAuthCookie(headersList.get('cookie'));
+    const payload = token ? verifyToken(token) : null;
 
-export default function Dashboard() {
-    const [message, setMessage] = useState("Lade...");
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            window.location.href = "/login";
-            return;
-        }
-
-        fetch("/api/protected", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => setMessage(data.message || "Fehler"))
-            .catch(() => setMessage("Fehler beim Laden"));
-    }, []);
+    if (!payload) {
+        redirect('/login');
+    }
 
     return (
-        <div className="p-6">
-            <h1 className="text-xl font-bold">Dashboard</h1>
-            <p>{message}</p>
+        <div>
+            <h1>Welcome, {payload.username}</h1>
+            <p>User Id: {payload.uid}</p>
         </div>
-    );
+    )
 }
