@@ -1,6 +1,7 @@
 import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import LogoutButton from "@/app/dashboard/LogoutButton";
 
 export default async function HomePage(request) {
     const headersList = await headers();
@@ -15,6 +16,7 @@ export default async function HomePage(request) {
         <div>
             <h1>Welcome, {payload.username}</h1>
             <p>User Id: {payload.uid}</p>
+            <LogoutButton />
         </div>
     )
 }

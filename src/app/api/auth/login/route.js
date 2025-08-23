@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import jsonwebtoken from 'jsonwebtoken';
+import client from '../../../utils/db.js';
 
 const mockUsers = [
     { id: 1, username: 'mock', password: '$2b$10$EgK.eBWg6jsqMm/1qNBPfu/2wexUEaQZS/vOeuS2aVpYhzj6kmpiO' }
@@ -9,6 +10,8 @@ const mockUsers = [
 export async function POST(request) {
     const { username, password } = await request.json();
 
+    const user2 = client.query("SELECT * FROM users WHERE name=$1", [username]);
+    console.log(user2);
     const user = mockUsers.find(u => u.username === username);
 
     if (!user) {
