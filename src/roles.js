@@ -1,6 +1,6 @@
 const roles = {
     "admin": ['auth', 'view:dashboard'],
-    "employee": ['']
+    "employee": ['view:dashboard']
 }
 
 export default roles;

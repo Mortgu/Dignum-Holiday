@@ -2,10 +2,10 @@ import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import LogoutButton from "@/app/dashboard/LogoutButton";
-import Link from "next/link";
 import Navigation from "@/components/navigation/navigation.component";
+import { withPermission } from "@/app/lib/authentication";
 
-export default async function DashboardPage(request) {
+async function DashboardPage(request) {
     const headersList = await headers();
     const token = parseAuthCookie(headersList.get('cookie'));
     const payload = token ? verifyToken(token) : null;
@@ -23,3 +23,5 @@ export default async function DashboardPage(request) {
         </div>
     )
 }
+
+export default withPermission(DashboardPage, 'view:dashboard');

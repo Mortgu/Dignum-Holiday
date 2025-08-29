@@ -6,10 +6,9 @@ const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 import permissions from "./permissions";
 import roles from "./roles";
-import { JWT_SECRET } from "./config";
 
 const authenticate = async (token) => {
-    return await jwtVerify(token, JWT_SECRET, {
+    return await jwtVerify(token, SECRET, {
         issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE, 
     });
 }
@@ -25,12 +24,12 @@ export async function middleware(request) {
     try {
         const { payload } = await authenticate(token);
 
-
         if (!payload) {
             const response = NextResponse.redirect(new URL('/login', request.url));
             response.cookies.delete('authentication');
             return response;
         }
+
 
         for (const route in permissions) {
             
