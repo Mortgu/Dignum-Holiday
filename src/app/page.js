@@ -18,7 +18,7 @@ export default async function HomePage(request) {
     return (
         <Fragment>
             <div>
-                <h1>Welcome, {payload.username}</h1>
+                <h1>Welcome, {payload.name}</h1>
                 <p>User Id: {payload.uid}</p>
                 <LogoutButton/>
             </div>

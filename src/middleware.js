@@ -4,15 +4,8 @@ import * as jose from 'jose'
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
-const routePermissions = {
-    "/": ['dawda', '*'],
-    "/dashboard": ['view:dashboard', '*'],
-}
-
-const rolePermissions = {
-    "admin": ['*'],
-    "employee": ['view:dashboard']
-}
+import permissions from "./permissions";
+import roles from "./roles";
 
 export async function middleware(request) {
     const token = parseAuthCookie(request.headers.get('cookie'))
@@ -34,14 +27,14 @@ export async function middleware(request) {
             return response;
         }
 
-        for (const route in routePermissions) {
-            console.log(url, route, url.startsWith(route));
+        for (const route in permissions) {
+            
             if (url === route) {
-                const requiredPermissions = routePermissions[route];
-                const userPermissions = rolePermissions[payload.role];
+                const requiredPermissions = permissions[route];
+                const userPermissions = roles[payload.role];
                 console.log("requiredPermissions: " + requiredPermissions, "userPermissions: " + userPermissions);
 
-                const hasPermission = userPermissions.some((permission) => requiredPermissions.includes(permission));
+                const hasPermission = userPermissions.some((permission) => requiredPermissions.includes(permission))  || userPermissions.includes('*');
 
                 if (!hasPermission) {
                     return NextResponse.json({
@@ -53,7 +46,6 @@ export async function middleware(request) {
 
         return NextResponse.next();
     } catch (exception) {
-        console.error("JWT verification failed", exception);
         return NextResponse.redirect(new URL("/login", request.url));
     }
 }

@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { isDevelopment, isProduction } from "@/env";
+
+import { config } from '@/config';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -13,10 +16,10 @@ export default function LoginPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const response = await fetch('/api/auth/login', {
+        const response = await fetch(`${config.apiUrl}/auth/login`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({username, password})
+            body: JSON.stringify({ username, password })
         });
 
         if (response.ok) {

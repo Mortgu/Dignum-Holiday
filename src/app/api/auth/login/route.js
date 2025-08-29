@@ -12,9 +12,17 @@ const mockUsers = [
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function POST(request) {
-    const {username, password} = await request.json();
+    const { username, password } = await request.json();
 
-    const matches = await client.query("SELECT users.id, users.name as name, users.email, users.password, roles.name as role FROM users JOIN roles ON users.role = roles.id WHERE users.name = $1;", [username]);
+    let matches;
+
+    try {
+        matches = await client.query("SELECT users.*, roles.name as role FROM users JOIN roles ON users.role = roles.id WHERE users.name = $1;", [username]);
+    } catch (exception) {
+        return NextResponse.json({
+            error: 'Failed to fetch data from database!'
+        }, { status: 500 });
+    }
 
     if (matches.rowCount === 0) {
         return NextResponse.json({
@@ -33,7 +41,7 @@ export async function POST(request) {
     }
 
     const token = await new SignJWT({
-        id: user.id, name: user.name, email: user.email, role: user.role
+        uid: user.id, name: user.name, email: user.email, role: user.role
     }).setProtectedHeader({
         alg: 'HS256'
     }).setIssuedAt().setIssuer(process.env.JWT_ISSUER)
