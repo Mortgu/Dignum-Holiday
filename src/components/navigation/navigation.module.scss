@@ -1,17 +1,18 @@
 .navigation {
-  width: 360px;
   height: 100%;
 
   padding: 20px;
 
-  position: fixed;
-  left: 0;
-  top: 0;
+  //position: fixed;
+  //left: 0;
+  //top: 0;
 
   box-sizing: border-box;
 
   background: white;
   border-right: 1px solid rgba(black, .2);
+
+  grid-area: nav;
 
   .navigation_item_group {
     .navigation_item_group_header {

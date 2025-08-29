@@ -16,13 +16,11 @@ export default async function HomePage(request) {
     }
 
     return (
-        <Fragment>
-            <div>
-                <h1>Welcome, {payload.name}</h1>
-                <p>User Id: {payload.uid}</p>
-                <LogoutButton/>
-            </div>
-        </Fragment>
-
+        <div className="layout">
+            <Navigation />
+            <div className="page">
+                <p>{JSON.stringify(payload)}</p>
+            </div>        
+        </div>
     )
 }

@@ -1,5 +1,20 @@
 @use 'abstract/typographie' as *;
+@use 'layouts/layouts.scss' as layout;
+
+html, body {
+  margin: 0;
+
+  overflow: hidden;
+}
 
 * {
-  border: 1px solid red;
+  box-sizing: border-box;
+}
+
+.page {
+  grid-area: content;
+  width: 100%;
+  height: 100%;
+
+  overflow: scroll;
 }

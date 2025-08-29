@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import LogoutButton from "@/app/dashboard/LogoutButton";
 import Link from "next/link";
+import Navigation from "@/components/navigation/navigation.component";
 
 export default async function DashboardPage(request) {
     const headersList = await headers();
@@ -14,12 +15,11 @@ export default async function DashboardPage(request) {
     }
 
     return (
-        <div>
-            <h1>Welcome, {payload.name}</h1>
-            <p>User Id: {payload.uid}</p>
-            <p>role: {payload.role}</p>
-            <Link href='/'>Home</Link>
-            <LogoutButton />
-        </div>
+              <div className="layout">
+                  <Navigation />
+                  <div className="page">
+                      <LogoutButton />
+                  </div>        
+              </div>
     )
 }

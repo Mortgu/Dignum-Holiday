@@ -14,7 +14,7 @@ export default function Navigation() {
                     <Link href='/'>
                         <span className="material-symbols-outlined">dashboard</span>
                         Dashboard</Link>
-                    <Link href='/übersicht'>
+                    <Link href='/dashboard'>
                         <span className="material-symbols-outlined">dashboard</span>
                         Übersicht</Link>
                     <Link href='/freigaben'>
