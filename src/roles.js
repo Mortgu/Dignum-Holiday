@@ -1,5 +1,5 @@
 const roles = {
-    "admin": ['*'],
+    "admin": ['auth', '*'],
     "employee": ['']
 }
 

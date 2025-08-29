@@ -15,11 +15,11 @@ export default async function DashboardPage(request) {
     }
 
     return (
-              <div className="layout">
-                  <Navigation />
-                  <div className="page">
-                      <LogoutButton />
-                  </div>        
-              </div>
+        <div className="layout">
+            <Navigation/>
+            <div className="page">
+                <LogoutButton/>
+            </div>
+        </div>
     )
 }

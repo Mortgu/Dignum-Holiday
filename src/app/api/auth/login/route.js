@@ -1,27 +1,26 @@
 import { NextResponse } from "next/server";
 import { compare } from "bcryptjs";
-import jsonwebtoken from 'jsonwebtoken';
-import client from '../../../utils/db.js';
 import { SignJWT } from "jose";
-import { createSecretKey } from 'crypto';
 
-const mockUsers = [
-    {id: 1, username: 'mock', password: '$2b$10$EgK.eBWg6jsqMm/1qNBPfu/2wexUEaQZS/vOeuS2aVpYhzj6kmpiO'}
-];
-
-const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+import client from '@/app/utils/db';
+import { config, JWT_SECRET } from "@/config";
+import permissions from "@/permissions";
+import roles from "@/roles";
 
 export async function POST(request) {
-    const { username, password } = await request.json();
+    let {username, password} = await request.json();
+
+    username = username.toLowerCase();
 
     let matches;
 
     try {
-        matches = await client.query("SELECT users.*, roles.name as role FROM users JOIN roles ON users.role = roles.id WHERE users.name = $1;", [username]);
+        matches = await client.query("SELECT users.id, users.role, users.name, users.password, users.email, roles.name as role FROM users JOIN roles ON users.role = roles.id WHERE users.name=$1;", [username]);
     } catch (exception) {
+        console.log(exception)
         return NextResponse.json({
             error: 'Failed to fetch data from database!'
-        }, { status: 500 });
+        }, {status: 500});
     }
 
     if (matches.rowCount === 0) {
@@ -30,28 +29,32 @@ export async function POST(request) {
         }, {status: 401});
     }
     const user = matches.rows[0];
-    console.log(matches.rows);
+
+    if (!roles[user.role].includes('auth')) {
+        return NextResponse.json({
+            message: 'Error! User is not allowed to authenticate!'
+        }, { status: 403 });
+    }
 
     const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
         return NextResponse.json({
             error: 'Incorrect password!'
-        }, {status: 401});
+        }, { status: 401 });
     }
 
     const token = await new SignJWT({
         uid: user.id, name: user.name, email: user.email, role: user.role
-    }).setProtectedHeader({
-        alg: 'HS256'
-    }).setIssuedAt().setIssuer(process.env.JWT_ISSUER)
+    }).setProtectedHeader({alg: 'HS256'})
+        .setIssuedAt().setIssuer(process.env.JWT_ISSUER)
         .setAudience(process.env.JWT_AUDIENCE)
         .setExpirationTime(process.env.JWT_EXPIRATION_TIME)
-        .sign(SECRET);
+        .sign(JWT_SECRET);
 
-    const response = NextResponse.json({message: 'Login successful'});
+    const response = NextResponse.json({message: user});
 
-    response.cookies.set('authentication', token, {
+    response.cookies.set(config.authCookieName, token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
