@@ -28,9 +28,11 @@ export default function LoginPage() {
     };
 
     return (
-        <>
-            <p>{error}</p>
-            <form onSubmit={handleSubmit}>
+        <div className='login-page'>
+            <div className='login-message-display'>
+                <p>{error}</p>
+            </div>
+            <form className='login-form' onSubmit={handleSubmit}>
                 <input type='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)}
                        required/>
                 <input type='password' placeholder='Password' value={password}
@@ -38,6 +40,6 @@ export default function LoginPage() {
                        required/>
                 <button type='submit'>Login</button>
             </form>
-        </>
+        </div>
     )
 }

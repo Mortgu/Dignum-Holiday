@@ -1,0 +1,27 @@
+.navigation {
+  width: 360px;
+  height: 100%;
+
+  padding: 20px;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  box-sizing: border-box;
+
+  background: white;
+  border-right: 1px solid rgba(black, .2);
+
+  .navigation_item_group {
+    .navigation_item_group_header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navigation_items {
+      display: grid;
+    }
+  }
+}
