@@ -1,11 +1,18 @@
 import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { NextResponse } from "next/server";
-import * as jose from 'jose'
+import { jwtVerify } from 'jose'
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 import permissions from "./permissions";
 import roles from "./roles";
+import { JWT_SECRET } from "./config";
+
+const authenticate = async (token) => {
+    return await jwtVerify(token, JWT_SECRET, {
+        issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE, 
+    });
+}
 
 export async function middleware(request) {
     const token = parseAuthCookie(request.headers.get('cookie'))
@@ -16,10 +23,8 @@ export async function middleware(request) {
     }
 
     try {
-        const { payload, protectedHeader } = await jose.jwtVerify(token, SECRET, {
-            issuer: process.env.JWT_ISSUER, // issuer
-            audience: process.env.JWT_AUDIENCE, // audience
-        });
+        const { payload } = await authenticate(token);
+
 
         if (!payload) {
             const response = NextResponse.redirect(new URL('/login', request.url));
@@ -30,6 +35,7 @@ export async function middleware(request) {
         for (const route in permissions) {
             
             if (url === route) {
+            
                 const requiredPermissions = permissions[route];
                 const userPermissions = roles[payload.role];
                 console.log("requiredPermissions: " + requiredPermissions, "userPermissions: " + userPermissions);
