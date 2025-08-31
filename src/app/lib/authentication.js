@@ -39,7 +39,7 @@ export async function requirePermission(request, response, permission) {
 export function withPermission(handler, permission) {
     return async (request, response) => {
         const user = await requirePermission(request, response, permission);
-        if (!user) return <>daw</>;
+        if (!user) return <>withPermission(): Failed</>;
         return handler(request, response, user);
     }
 }

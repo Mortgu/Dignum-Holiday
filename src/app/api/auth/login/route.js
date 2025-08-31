@@ -33,7 +33,7 @@ export async function POST(request) {
 
     if (!roles[user.role].includes('auth')) {
         return NextResponse.json({
-            message: 'Error! User is not allowed to authenticate!'
+            error: 'Error! User is not allowed to authenticate!'
         }, { status: 403 });
     }
 

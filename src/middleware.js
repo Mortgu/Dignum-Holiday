@@ -30,25 +30,6 @@ export async function middleware(request) {
             return response;
         }
 
-
-        for (const route in permissions) {
-            
-            if (url === route) {
-            
-                const requiredPermissions = permissions[route];
-                const userPermissions = roles[payload.role];
-                console.log("requiredPermissions: " + requiredPermissions, "userPermissions: " + userPermissions);
-
-                const hasPermission = userPermissions.some((permission) => requiredPermissions.includes(permission))  || userPermissions.includes('*');
-
-                if (!hasPermission) {
-                    return NextResponse.json({
-                        error: 'You dont have permissions to view this page!'
-                    }, {status: 401});
-                }
-            }
-        }
-
         return NextResponse.next();
     } catch (exception) {
         return NextResponse.redirect(new URL("/login", request.url));

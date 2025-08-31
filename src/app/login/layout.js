@@ -1,7 +1,10 @@
-import './login.page.scss';
-
-export default function LoginLayout({ children }) {
+export default function LoginLayout({children}) {
     return (
-        <div className='login-layout'>{children}</div>
+        <html>
+            <head></head>
+            <body>
+                <div>{children}</div>
+            </body>
+        </html>
     );
 }

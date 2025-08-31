@@ -2,7 +2,7 @@ import { isProduction, isDevelopment, isTest } from "./env";
 
 const base = {
     logLevel: isProduction ? 'info' : 'debug',
-    apiUrl: isProduction ? '/api' : '/api/dev',
+    apiUrl: isProduction ? '/api' : '/api',
     authCookieName: 'authentication'
 };
 

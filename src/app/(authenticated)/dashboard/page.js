@@ -1,12 +1,11 @@
-
 import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/app/dashboard/LogoutButton";
+import LogoutButton from "@/app/(authenticated)/dashboard/LogoutButton";
 import Navigation from "@/components/navigation/navigation.component";
-import { Fragment } from "react";
+import { withPermission } from "@/app/lib/authentication";
 
-export default async function HomePage(request) {
+async function DashboardPage(request) {
     const headersList = await headers();
     const token = parseAuthCookie(headersList.get('cookie'));
     const payload = token ? verifyToken(token) : null;
@@ -16,11 +15,10 @@ export default async function HomePage(request) {
     }
 
     return (
-        <div className="layout">
-            <Navigation />
-            <div className="page">
-                <p>{JSON.stringify(payload)}</p>
-            </div>        
+        <div className="page">
+            <LogoutButton/>
         </div>
     )
 }
+
+export default withPermission(DashboardPage, 'dashboard:view');
