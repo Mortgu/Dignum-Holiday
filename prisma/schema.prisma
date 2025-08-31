@@ -1,20 +1,46 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_URL")
 }
 
-enum Roles {
-  EMPLOYEE
-  ADMINISTRATOR
+model role_permissions {
+  id                 Int          @id @default(autoincrement())
+  role               Int?
+  roleRelation       roles?       @relation(fields: [role], references: [id])
+  permission         Int?
+  permissionRelation permissions? @relation(fields: [permission], references: [id])
+}
+
+model permissions {
+  id             Int                @id @unique @default(autoincrement())
+  displayName    String
+  url            String             @unique
+  roles          roles[]
+  RolePermission role_permissions[]
+}
+
+model roles {
+  id             Int                @id @unique @default(autoincrement())
+  name           String             @unique
+  users          users[]
+  permissions    permissions[]
+  RolePermission role_permissions[]
+}
+
+model users {
+  id                  Int      @id @default(autoincrement())
+  email               String   @unique
+  firstName           String
+  lastName            String
+  entryDate           DateTime @default(now())
+  exitDate            DateTime
+  workingHours        Int
+  vacationEntitlement Int
+  password            String
+  role                Int?
+  roleRelation        roles?   @relation(fields: [role], references: [id])
 }

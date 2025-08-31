@@ -8,15 +8,17 @@ import { usePathname } from "next/navigation";
 export default function Navigation({ payload }) {
     const pathname = usePathname();
 
-    const isActive = (href) => pathname === href;
+    const isActive = (href) => pathname.includes(href);
+
+    console.log(payload)
 
     return (
         <nav className='navigation'>
             <div className='navigation-head'>
                 <div className='navigation-user-profile'></div>
                 <div className='navigation-user'>
-                    <p className='navigation-username'>{payload.name}</p>
-                    <p className='navigation-role'>{payload.role}</p>
+                    <p className='navigation-username'>{payload.firstName} {payload.lastName}</p>
+                    <p className='navigation-role'>{payload.role.name}</p>
                 </div>
             </div>
 

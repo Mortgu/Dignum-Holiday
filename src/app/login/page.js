@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { config } from '@/config';
+import prisma from "@/app/lib/prisma.js";
 
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState('');
 
     const router = useRouter();
@@ -18,7 +19,7 @@ export default function LoginPage() {
         const response = await fetch(`${config.apiUrl}/auth/login`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ email, password })
         });
 
         if (response.ok) {
@@ -35,13 +36,14 @@ export default function LoginPage() {
                 <p>{error}</p>
             </div>
             <form className='login-form' onSubmit={handleSubmit}>
-                <input type='text' placeholder='Username' value={username} onChange={(e) => setUsername(e.target.value)}
+                <input type='email' placeholder='E-Mail' value={email} onChange={(e) => setEmail(e.target.value)}
                        required/>
                 <input type='password' placeholder='Password' value={password}
                        onChange={(e) => setPassword(e.target.value)}
                        required/>
                 <button type='submit'>Login</button>
             </form>
+
         </div>
     )
 }

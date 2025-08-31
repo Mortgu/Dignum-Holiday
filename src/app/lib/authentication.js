@@ -22,7 +22,8 @@ export async function requirePermission(request, response, permission) {
         });
 
         const role = payload.role;
-        const hasPermission = await checkPermission(role, permission);
+        const hasPermission = await checkPermission(role.id, permission);
+        console.log("hasPermi", hasPermission)
 
         if (!hasPermission) {
             NextResponse.json({ error: 'er' }, { status: 403 });
@@ -31,6 +32,7 @@ export async function requirePermission(request, response, permission) {
 
         return payload;
     } catch (exception) {
+        console.log(exception);
         response.status(401).json({ error: 'Invalid token' });
         return null;
     }
@@ -38,6 +40,7 @@ export async function requirePermission(request, response, permission) {
 
 export function withPermission(handler, permission) {
     return async (request, response) => {
+        console.log('dawdw')
         const user = await requirePermission(request, response, permission);
         if (!user) return <>withPermission(): Failed</>;
         return handler(request, response, user);

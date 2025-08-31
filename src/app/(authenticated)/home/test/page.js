@@ -4,7 +4,7 @@ import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { withPermission } from "@/app/lib/authentication";
-import TabsComponent from "@/components/tabs/tabs.component";
+import { prisma } from "@/app/lib/prisma";
 
 async function TestPage(request) {
     const headersList = await headers();
@@ -15,9 +15,15 @@ async function TestPage(request) {
         redirect('/login');
     }
 
+    const users = await prisma.user.findMany();
+
     return (
         <div className="page">
-            Test Page
+            {users.map((user) => (
+                <li key={user.id} className="mb-2">
+                    {user.name}
+                </li>
+            ))}
         </div>
     )
 }
