@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import './navigation.component.scss';
 
@@ -28,7 +28,7 @@ export default function Navigation({ payload }) {
                     </button>
                 </div>
                 <div className='navigation-section-items'>
-                    <Link href='/' className={isActive('/') ? 'navigation-item active' : 'navigation-item'}>
+                    <Link href='/home' className={isActive('/home') ? 'navigation-item active' : 'navigation-item'}>
                         <span className="material-symbols-outlined">home</span>
                         Home
                     </Link>
@@ -39,6 +39,21 @@ export default function Navigation({ payload }) {
                     <Link href='/absences' className='navigation-item'>
                         <span className="material-symbols-outlined">home</span>
                         Abwesenheiten
+                    </Link>
+                </div>
+            </div>
+
+            <div className='navigation-section'>
+                <div className='navigation-section-head'>
+                    <p className='navigation-section-name'>Administration</p>
+                    <button className='navigation-section-action'>
+                        <span className="material-symbols-outlined">keyboard_arrow_down</span>
+                    </button>
+                </div>
+                <div className='navigation-section-items'>
+                    <Link href='/administration' className={isActive('/administration') ? 'navigation-item active' : 'navigation-item'}>
+                        <span className="material-symbols-outlined">home</span>
+                        Rollen
                     </Link>
                 </div>
             </div>
