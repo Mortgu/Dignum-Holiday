@@ -5,7 +5,7 @@ import './navigation.component.scss';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Navigation() {
+export default function Navigation({ payload }) {
     const pathname = usePathname();
 
     const isActive = (href) => pathname === href;
@@ -15,8 +15,8 @@ export default function Navigation() {
             <div className='navigation-head'>
                 <div className='navigation-user-profile'></div>
                 <div className='navigation-user'>
-                    <p className='navigation-username'>Oskar</p>
-                    <p className='navigation-role'>Employee</p>
+                    <p className='navigation-username'>{payload.name}</p>
+                    <p className='navigation-role'>{payload.role}</p>
                 </div>
             </div>
 
