@@ -10,8 +10,6 @@ export default function Navigation({ payload }) {
 
     const isActive = (href) => pathname.includes(href);
 
-    console.log(payload)
-
     return (
         <nav className='navigation'>
             <div className='navigation-head'>
@@ -53,9 +51,9 @@ export default function Navigation({ payload }) {
                     </button>
                 </div>
                 <div className='navigation-section-items'>
-                    <Link href='/administration' className={isActive('/administration') ? 'navigation-item active' : 'navigation-item'}>
-                        <span className="material-symbols-outlined">home</span>
-                        Rollen
+                    <Link href='/settings' className={isActive('/settings') ? 'navigation-item active' : 'navigation-item'}>
+                        <span className="material-symbols-outlined">settings</span>
+                        Settings
                     </Link>
                 </div>
             </div>

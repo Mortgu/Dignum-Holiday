@@ -10,7 +10,7 @@ export async function getPermissionsForRole(role) {
 
 export async function getPermissionsForRole2(roleId) {
     const permissions = await prisma.role_permissions.findMany({
-        where: { id: roleId }, include: { permissionRelation: true }
+        where: { role: roleId }, include: { permissionRelation: true }
     });
 
     return permissions.map(obj => obj.permissionRelation.displayName);

@@ -22,6 +22,7 @@ export async function requirePermission(request, response, permission) {
         });
 
         const role = payload.role;
+        console.log(role.id, permission)
         const hasPermission = await checkPermission(role.id, permission);
         console.log("hasPermi", hasPermission)
 
@@ -40,7 +41,6 @@ export async function requirePermission(request, response, permission) {
 
 export function withPermission(handler, permission) {
     return async (request, response) => {
-        console.log('dawdw')
         const user = await requirePermission(request, response, permission);
         if (!user) return <>withPermission(): Failed</>;
         return handler(request, response, user);
