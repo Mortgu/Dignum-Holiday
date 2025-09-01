@@ -2,8 +2,21 @@
 
 import PermissionCheckbox from "@/components/PermissionCheckbox.js";
 
-export default function RoleSettings({ roles, permissions }) {
-    console.log(roles)
+export default function RoleSettings({roles, permissions}) {
+    const handleChangePerm = async (role, permission, event) => {
+        console.log(role, permission);
+
+        const response = await fetch(`/api/roles/${role.id}/`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ permission, checked: event.target.checked })
+        });
+
+        if (response.ok) {
+            event.target.checked = !event.target.checked;
+        }
+    }
 
     return (
         <div className='roles'>
@@ -13,11 +26,14 @@ export default function RoleSettings({ roles, permissions }) {
                     <div className='permissions'>
                         {permissions.map((permission, index) => {
                             const hasPermission = !!(role.RolePermission.find(e => e.permission === permission.id));
-                            console.log("hasPermission", hasPermission)
                             return (
-                                <PermissionCheckbox onChange={(event) => {
-                                    console.log(permission.displayName)
-                                }} key={index} checked={hasPermission} displayName={permission.displayName} />
+                                <PermissionCheckbox
+                                    onChange={(event) => handleChangePerm(role, permission, event)}
+                                    id={permission.id}
+                                    key={index}
+                                    checked={hasPermission}
+                                    displayName={permission.displayName}
+                                />
                             )
                         })}
                     </div>
