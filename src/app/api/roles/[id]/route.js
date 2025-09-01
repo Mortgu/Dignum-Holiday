@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma.js";
 
-export async function POST(request, { params }) {
+export async function PATCH(request, { params }) {
     const { id } = await params;
     const { permission, checked } = await request.json();
-
-    console.log('role: ' + id, permission, checked);
 
     if (checked) {
         await prisma.role_permissions.create({
@@ -24,4 +22,8 @@ export async function POST(request, { params }) {
             message: 'Successfully removed permission from role.'
         }, { status: 200 });
     }
+}
+
+export async function POST(request, { params }) {
+
 }

@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 const initialRoles = [
     { name: 'system', system: true },
+    { name: 'test' },
     { name: 'user', system: true }
 ]
 
@@ -36,9 +37,9 @@ const initialPermissions = [
     { name: 'roles:create' },
     { name: 'roles:modify' },
     { name: 'roles:delete' },
-    { name: 'dashboard:view' },
-    { name: 'home:view' },
-    { name: 'settings:view' },
+    { name: 'dashboard:view', base: true },
+    { name: 'home:view', base: true },
+    { name: 'settings:view', base: true },
 ]
 
 const initialRolePermissions = [

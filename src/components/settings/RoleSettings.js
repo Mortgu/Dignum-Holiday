@@ -1,13 +1,13 @@
 'use client'
 
-import PermissionCheckbox from "@/components/PermissionCheckbox.js";
+import PermissionCheckbox from "@/components/settings/PermissionCheckbox.js";
 
 export default function RoleSettings({roles, permissions}) {
     const handleChangePerm = async (role, permission, event) => {
         console.log(role, permission);
 
         const response = await fetch(`/api/roles/${role.id}/`, {
-            method: 'POST',
+            method: 'PATCH',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ permission, checked: event.target.checked })
@@ -20,10 +20,6 @@ export default function RoleSettings({roles, permissions}) {
 
     return (
         <div>
-            <form method='POST'>
-                <input type='text' placeholder='Role name' />
-                <button type='submit'>Create Role</button>
-            </form>
             <div className='roles'>
                 {roles.map((role, index) => (
                     <div className='role' key={index}>
