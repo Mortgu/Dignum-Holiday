@@ -4,6 +4,7 @@ import RoleSettings from "@/components/settings/RoleSettings.js";
 import prisma from "@/app/lib/prisma.js";
 import Permission from "@/app/(authenticated)/Permission.js";
 import RoleCreationForm from "@/components/settings/RoleCreationForm.js";
+import { RoleContextProvider } from "@/components/settings/roles.display.js";
 
 async function SettingsPage() {
     const roles = await prisma.roles.findMany({
@@ -14,6 +15,7 @@ async function SettingsPage() {
         select: {id: true, name: true}
     });
     const users = await prisma.users.findMany();
+
 
     return (
         <div>
@@ -26,9 +28,12 @@ async function SettingsPage() {
             <Permission permission='roles:modify'>
                 <fieldset>
                     <legend>Roles</legend>
-                    <RoleSettings roles={roles} permissions={permissions}/>
+                    <RoleContextProvider>
+                        <RoleSettings roles={roles} permissions={permissions}/>
+                    </RoleContextProvider>
                 </fieldset>
             </Permission>
+
             <fieldset>
                 <legend>Users</legend>
                 <form>

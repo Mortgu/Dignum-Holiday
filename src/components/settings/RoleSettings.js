@@ -1,8 +1,11 @@
 'use client'
 
 import PermissionCheckbox from "@/components/settings/PermissionCheckbox.js";
+import { useRoleContext } from "@/components/settings/roles.display.js";
 
 export default function RoleSettings({roles, permissions}) {
+    const { dispatch } = useRoleContext();
+
     const handleChangePerm = async (role, permission, event) => {
         console.log(role, permission);
 
@@ -15,6 +18,7 @@ export default function RoleSettings({roles, permissions}) {
 
         if (response.ok) {
             event.target.checked = !event.target.checked;
+            dispatch(true);
         }
     }
 
