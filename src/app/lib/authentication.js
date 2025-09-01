@@ -22,9 +22,7 @@ export async function requirePermission(request, response, permission) {
         });
 
         const role = payload.role;
-        console.log(role.id, permission)
         const hasPermission = await checkPermission(role.id, permission);
-        console.log("hasPermi", hasPermission)
 
         if (!hasPermission) {
             NextResponse.json({ error: 'er' }, { status: 403 });
@@ -46,3 +44,22 @@ export function withPermission(handler, permission) {
         return handler(request, response, user);
     }
 }
+
+export async function checkAuthentication() {
+    const headersList = await headers();
+    const token = parseAuthCookie(headersList.get('cookie'));
+
+    if (!token) return null;
+
+    try {
+        return await jwtVerify(token, JWT_SECRET, {
+            issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE,
+        });
+    } catch (exception) {
+        return null;
+    }
+}
+
+/*export async function checkPermission(request, response, permission) {
+
+}*/

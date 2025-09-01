@@ -2,81 +2,75 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const roleData = [
-    {
-        name: 'administrator'
-    },
-    {
-        name: 'employee'
-    }
+const initialRoles = [
+    { name: 'system', system: true },
+    { name: 'user', system: true }
 ]
 
-const userData = [
-    {
-        email: 'oskar.sammet@dignum.de',
-        firstName: 'oskar',
-        lastName: 'sammet',
-        entryDate: new Date(),
-        exitDate: new Date(),
-        workingHours: 40,
-        vacationEntitlement: 20,
-        password: '$2b$10$EgK.eBWg6jsqMm/1qNBPfu/2wexUEaQZS/vOeuS2aVpYhzj6kmpiO',
-        role: 1,
-    },
-    {
-        email: 'armin.sammet@dignum.de',
-        firstName: 'armin',
-        lastName: 'sammet',
-        entryDate: new Date(),
-        exitDate: new Date(),
-        workingHours: 40,
-        vacationEntitlement: 20,
-        password: '$2b$10$EgK.eBWg6jsqMm/1qNBPfu/2wexUEaQZS/vOeuS2aVpYhzj6kmpiO',
-        role: 2,
-    },
-];
+const initialUsers = [{
+    email: 'system@local',
+    firstName: 'system',
+    lastName: '',
+    entryDate: new Date(),
+    exitDate: new Date(),
+    workingHours: 0,
+    vacationEntitlement: 0,
+    password: '$2b$10$EgK.eBWg6jsqMm/1qNBPfu/2wexUEaQZS/vOeuS2aVpYhzj6kmpiO',
+    role: 1,
+}, {
+    email: 'user@local',
+    firstName: 'user',
+    lastName: '',
+    entryDate: new Date(),
+    exitDate: new Date(),
+    workingHours: 0,
+    vacationEntitlement: 0,
+    password: '$2b$10$EgK.eBWg6jsqMm/1qNBPfu/2wexUEaQZS/vOeuS2aVpYhzj6kmpiO',
+    role: 2,
+}];
 
-const permissionData = [
-    {
-        displayName: 'dashboard:view',
-        url: '/dashboard'
-    },
-    {
-        displayName: 'home:view',
-        url: '/home'
-    },
+const initialPermissions = [
+    { name: 'users:create' },
+    { name: 'users:modify' },
+    { name: 'users:delete' },
+    { name: 'roles:create' },
+    { name: 'roles:modify' },
+    { name: 'roles:delete' },
+    { name: 'dashboard:view' },
+    { name: 'home:view' },
+    { name: 'settings:view' },
 ]
 
-const rolePermissionData = [
-    {
-        role: 1,
-        permission: 1
-    },
-    {
-        role: 1,
-        permission: 2
-    },
-    {
-        role: 2,
-        permission: 1
-    },
+const initialRolePermissions = [
+    { role: 1, permission: 1 },
+    { role: 1, permission: 2 },
+    { role: 1, permission: 3 },
+    { role: 1, permission: 4 },
+    { role: 1, permission: 5 },
+    { role: 1, permission: 6 },
+    { role: 1, permission: 7 },
+    { role: 1, permission: 8 },
+    { role: 1, permission: 9 },
+    { role: 2, permission: 7 },
+    { role: 2, permission: 8 },
+    { role: 2, permission: 9 },
 ]
 
 export async function main() {
-    for (const user of userData) {
-        await prisma.users.create({ data: user });
+    for (const role of initialRoles) {
+        await prisma.roles.create({data: role});
     }
 
-    for (const role of roleData) {
-        await prisma.roles.create({ data: role });
+    for (const permission of initialPermissions) {
+        await prisma.permissions.create({data: permission});
     }
 
-    for (const permission of permissionData) {
-        await prisma.permissions.create({ data: permission });
+    for (const rolePermission of initialRolePermissions) {
+        await prisma.role_permissions.create({data: rolePermission});
     }
 
-    for (const rolePermission of rolePermissionData) {
-        await prisma.role_permissions.create({ data: rolePermission });
+    for (const user of initialUsers) {
+        await prisma.users.create({data: user});
     }
 }
 

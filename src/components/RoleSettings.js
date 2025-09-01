@@ -19,26 +19,32 @@ export default function RoleSettings({roles, permissions}) {
     }
 
     return (
-        <div className='roles'>
-            {roles.map((role, index) => (
-                <div className='role' key={index}>
-                    <p>{role.name}</p>
-                    <div className='permissions'>
-                        {permissions.map((permission, index) => {
-                            const hasPermission = !!(role.RolePermission.find(e => e.permission === permission.id));
-                            return (
-                                <PermissionCheckbox
-                                    onChange={(event) => handleChangePerm(role, permission, event)}
-                                    id={permission.id}
-                                    key={index}
-                                    checked={hasPermission}
-                                    displayName={permission.displayName}
-                                />
-                            )
-                        })}
+        <div>
+            <form method='POST'>
+                <input type='text' placeholder='Role name' />
+                <button type='submit'>Create Role</button>
+            </form>
+            <div className='roles'>
+                {roles.map((role, index) => (
+                    <div className='role' key={index}>
+                        <p>{role.name}</p>
+                        <div className='permissions'>
+                            {permissions.map((permission, index) => {
+                                const hasPermission = !!(role.RolePermission.find(e => e.permission === permission.id));
+                                return (
+                                    <PermissionCheckbox
+                                        onChange={(event) => handleChangePerm(role, permission, event)}
+                                        id={permission.id}
+                                        key={index}
+                                        checked={hasPermission}
+                                        displayName={permission.name}
+                                    />
+                                )
+                            })}
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     )
 }

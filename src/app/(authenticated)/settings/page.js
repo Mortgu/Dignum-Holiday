@@ -1,17 +1,21 @@
 import { withPermission } from "@/app/lib/authentication.js";
-import PermissionCheckbox from "@/components/PermissionCheckbox.js";
+
 import RoleSettings from "@/components/RoleSettings.js";
 import prisma from "@/app/lib/prisma.js";
+import Permission from "@/app/(authenticated)/Permission.js";
 
 async function SettingsPage() {
     const roles = await prisma.roles.findMany({
-        include: { RolePermission: true }
+        where: {system: false}, include: {RolePermission: true}
     });
+
     const permissions = await prisma.permissions.findMany();
 
     return (
         <div>
-            <RoleSettings roles={roles} permissions={permissions} />
+            <Permission permission='roles:create'>
+                <RoleSettings roles={roles} permissions={permissions}/>
+            </Permission>
         </div>
     )
 }

@@ -1,23 +1,14 @@
-import client from '@/app/utils/db';
 import prisma from "@/app/lib/prisma.js";
 
-export async function getPermissionsForRole(role) {
-    const query = await client.query('SELECT name, route, p.permission FROM role_permissions AS rp JOIN roles ON rp.role=roles.id JOIN permissions AS p ON rp.permission=p.pid WHERE name=$1', [role]);
-    const rows = query.rows;
-
-    return rows.map(rp => rp.permission);
-}
-
-export async function getPermissionsForRole2(roleId) {
+export async function getPermissionsForRole(roleId) {
     const permissions = await prisma.role_permissions.findMany({
         where: { role: roleId }, include: { permissionRelation: true }
     });
 
-    return permissions.map(obj => obj.permissionRelation.displayName);
+    return permissions.map(obj => obj.permissionRelation.name);
 }
 
 export const checkPermission = async (role, required) => {
-    const permissions = await getPermissionsForRole2(role);
-    console.log("permissions2: ", permissions)
+    const permissions = await getPermissionsForRole(role);
     return permissions.includes(required);
 }

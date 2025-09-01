@@ -17,8 +17,7 @@ model role_permissions {
 
 model permissions {
   id             Int                @id @unique @default(autoincrement())
-  displayName    String
-  url            String             @unique
+  name           String             @unique
   roles          roles[]
   RolePermission role_permissions[]
 }
@@ -26,6 +25,7 @@ model permissions {
 model roles {
   id             Int                @id @unique @default(autoincrement())
   name           String             @unique
+  system         Boolean            @default(false)
   users          users[]
   permissions    permissions[]
   RolePermission role_permissions[]
