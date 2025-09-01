@@ -24,6 +24,21 @@ export async function PATCH(request, { params }) {
     }
 }
 
-export async function POST(request, { params }) {
+export async function DELETE(request, { params }) {
+    const { id } = await params;
+
+    try {
+        await prisma.roles.delete({
+            where: { id: parseInt(id) }
+        });
+
+        return NextResponse.json({
+            message: 'Successfully deleted role!'
+        });
+    } catch (exception) {
+        return NextResponse.json({
+            error: 'Failed to delete Role!'
+        }, { status: 500 });
+    }
 
 }

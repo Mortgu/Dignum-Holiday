@@ -22,12 +22,18 @@ export default function RoleSettings({roles, permissions}) {
         }
     }
 
+    const handleDelete = async (role) => {
+        const response = await fetch(`/api/roles/${role.id}`, {
+            method: 'DELETE', credentials: 'include'
+        });
+    }
+
     return (
         <div>
             <div className='roles'>
                 {roles.map((role, index) => (
-                    <div className='role' key={index}>
-                        <p>{role.name}</p>
+                    <fieldset className='role' key={index}>
+                        <legend>{role.name}</legend>
                         <div className='permissions'>
                             {permissions.map((permission, index) => {
                                 const hasPermission = !!(role.RolePermission.find(e => e.permission === permission.id));
@@ -42,7 +48,8 @@ export default function RoleSettings({roles, permissions}) {
                                 )
                             })}
                         </div>
-                    </div>
+                        <button onClick={() => handleDelete(role)}>Delete Role</button>
+                    </fieldset>
                 ))}
             </div>
         </div>

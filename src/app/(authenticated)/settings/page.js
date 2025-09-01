@@ -14,8 +14,10 @@ async function SettingsPage() {
     const permissions = await prisma.permissions.findMany({
         select: {id: true, name: true}
     });
-    const users = await prisma.users.findMany();
 
+    const users = await prisma.users.findMany({
+        where: { system: false }
+    });
 
     return (
         <div>
@@ -50,19 +52,25 @@ async function SettingsPage() {
 
                     <button type='submit'>Create User</button>
                 </form>
-                <ul>
-                    {users.map((user, index) => (
-                        <li key={index} style={{display: 'flex', justifyContent: 'space-between'}}>
-                            <p>{user.firstName} {user.lastName}</p>
-                            <p>{user.email}</p>
-                            <select>
-                                {roles.map((role, index) => (
-                                    <option autoFocus={user.role.id === role.id} key={index}>{role.name}</option>
-                                ))}
-                            </select>
-                        </li>
-                    ))}
-                </ul>
+                <fieldset>
+                    <legend>Users</legend>
+                    <div>
+                        {users.map((user, index) => (
+                            <div key={index} style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
+                                <p>{user.firstName} {user.lastName}</p>
+                                <p>{user.email}</p>
+                                <select>
+                                    {roles.map((role, index) => {
+                                        return (
+                                            <option autoFocus={user.role.id === role.id} key={index}>{role.name}</option>
+                                        )
+                                    })}
+                                </select>
+                                <button type='submit'>delete</button>
+                            </div>
+                        ))}
+                    </div>
+                </fieldset>
             </fieldset>
         </div>
     )

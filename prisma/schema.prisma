@@ -44,4 +44,5 @@ model users {
   password            String
   role                Int?
   roleRelation        roles?   @relation(fields: [role], references: [id])
+  system              Boolean  @default(false)
 }
