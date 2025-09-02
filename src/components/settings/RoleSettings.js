@@ -30,7 +30,7 @@ export default function RoleSettings({roles, permissions}) {
 
     return (
         <div>
-            <div className='roles'>
+            <div className='roles' style={{display: 'flex'}}>
                 {roles.map((role, index) => (
                     <fieldset className='role' key={index}>
                         <legend>{role.name}</legend>
@@ -44,11 +44,14 @@ export default function RoleSettings({roles, permissions}) {
                                         key={index}
                                         checked={hasPermission}
                                         displayName={permission.name}
+                                        disabled={role.system}
                                     />
                                 )
                             })}
                         </div>
-                        <button onClick={() => handleDelete(role)}>Delete Role</button>
+                        {!role.system && (
+                            <button onClick={() => handleDelete(role)}>Delete Role</button>
+                        )}
                     </fieldset>
                 ))}
             </div>

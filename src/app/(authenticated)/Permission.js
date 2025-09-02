@@ -2,7 +2,7 @@ import { checkAuthentication } from "@/app/lib/authentication.js";
 import prisma from "@/app/lib/prisma.js";
 
 export default async function Permission({ permission, children }) {
-    const { payload } = await checkAuthentication()
+    const { payload } = await checkAuthentication();
 
     if (!payload) {
         return (
@@ -18,7 +18,6 @@ export default async function Permission({ permission, children }) {
         return e.permissionRelation.name === permission;
     });
 
-    console.log("hasPermission", getPermissions)
 
     if (!hasPermission) {
         return (

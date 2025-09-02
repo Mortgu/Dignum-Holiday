@@ -1,0 +1,32 @@
+.settings-users {
+  display: grid;
+  grid-gap: 10px;
+
+  .settings-users-form {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 5px;
+
+    input {
+      flex: 1;
+    }
+  }
+
+  .settings-users-display {
+    display: grid;
+    grid-gap: 10px;
+
+    .settings-user {
+      padding: 8px 12px;
+      border: 1px solid black;
+
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      p {
+        flex: 1;
+      }
+    }
+  }
+}

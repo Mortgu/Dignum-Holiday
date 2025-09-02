@@ -5,10 +5,11 @@ import prisma from "@/app/lib/prisma.js";
 import Permission from "@/app/(authenticated)/Permission.js";
 import RoleCreationForm from "@/components/settings/RoleCreationForm.js";
 import { RoleContextProvider } from "@/components/settings/roles.display.js";
+import Users from "@/components/settings/users.js";
 
 async function SettingsPage() {
     const roles = await prisma.roles.findMany({
-        where: {system: false}, include: {RolePermission: true}
+        include: {RolePermission: true}
     });
 
     const permissions = await prisma.permissions.findMany({
@@ -16,7 +17,7 @@ async function SettingsPage() {
     });
 
     const users = await prisma.users.findMany({
-        where: { system: false }
+        include: { roleRelation: true }
     });
 
     return (
@@ -36,42 +37,9 @@ async function SettingsPage() {
                 </fieldset>
             </Permission>
 
-            <fieldset>
-                <legend>Users</legend>
-                <form>
-                    <input type='text' placeholder='first name' />
-                    <input type='text' placeholder='last name' />
-                    <input type='email' placeholder='email' />
-                    <input type='number' placeholder='working hours' />
-                    <input type='number' placeholder='holidays' />
-                    <select>
-                        {roles.map((role, index) => (
-                            <option key={index}>{role.name}</option>
-                        ))}
-                    </select>
-
-                    <button type='submit'>Create User</button>
-                </form>
-                <fieldset>
-                    <legend>Users</legend>
-                    <div>
-                        {users.map((user, index) => (
-                            <div key={index} style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
-                                <p>{user.firstName} {user.lastName}</p>
-                                <p>{user.email}</p>
-                                <select>
-                                    {roles.map((role, index) => {
-                                        return (
-                                            <option autoFocus={user.role.id === role.id} key={index}>{role.name}</option>
-                                        )
-                                    })}
-                                </select>
-                                <button type='submit'>delete</button>
-                            </div>
-                        ))}
-                    </div>
-                </fieldset>
-            </fieldset>
+            <Permission permission='users:create'>
+                <Users users={users} roles={roles} />
+            </Permission>
         </div>
     )
 }
