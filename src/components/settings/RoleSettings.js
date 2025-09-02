@@ -7,8 +7,6 @@ export default function RoleSettings({roles, permissions}) {
     const { dispatch } = useRoleContext();
 
     const handleChangePerm = async (role, permission, event) => {
-        console.log(role, permission);
-
         const response = await fetch(`/api/roles/${role.id}/`, {
             method: 'PATCH',
             credentials: 'include',

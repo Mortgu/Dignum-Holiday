@@ -16,8 +16,6 @@ export default function Users({ users, roles }) {
 
 /** Displays all users */
 export function UsersDisplay({ users, roles }) {
-    console.log(users, roles)
-
     const handleModifyUserRole = async (userId, event) => {
         const newRoleId = event.target.value;
 
@@ -29,7 +27,7 @@ export function UsersDisplay({ users, roles }) {
         });
 
         if (response.ok) {
-            console.log('ok');
+            event.target.value = newRoleId;
         }
     }
 
@@ -77,8 +75,6 @@ export function UserCreationForm({ roles }) {
 
         const formData = new FormData(event.target);
         const formValues = Object.fromEntries(formData)
-
-        console.log(formValues);
 
         const response = await fetch('/api/users', {
             method: 'POST',

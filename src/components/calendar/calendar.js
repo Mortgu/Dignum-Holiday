@@ -61,8 +61,6 @@ export default function MyCalendar() {
     };
 
     const handleSelectEvent = async (event, e) => {
-        console.log(e.target);
-
         if (window.confirm(`"${event.title}" wirklich löschen? ${event.id}`)) {
             const response = await fetch(`/api/calendar/${event.id}`, {
                 method: 'POST',

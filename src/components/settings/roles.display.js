@@ -13,7 +13,6 @@ export const RoleContextProvider = ({children}) => {
     const [state, dispatch] = useState(false);
 
     useEffect(() => {
-        console.log(state);
     }, [state]);
 
     return (

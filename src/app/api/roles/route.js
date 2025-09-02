@@ -34,7 +34,6 @@ export async function POST(request) {
     }
 
     for (const index in list) {
-        console.log('insert ' + index + " for " + createRoleData.id);
         await prisma.role_permissions.create({
             data: { role: createRoleData.id, permission: parseInt(list[index]) }
         })

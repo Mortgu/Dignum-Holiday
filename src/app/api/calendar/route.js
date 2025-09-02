@@ -30,7 +30,6 @@ export async function POST(request) {
     const data = await request.json();
 
     try {
-        console.log(data, payload);
         const holiday = await prisma.holidays.create({
             data: {...data, user: payload.uid }
         });

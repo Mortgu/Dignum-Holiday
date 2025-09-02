@@ -30,7 +30,6 @@ export async function requirePermission(request, response, permission) {
 
         return payload;
     } catch (exception) {
-        console.log(exception);
         response.status(401).json({ error: 'Invalid token' });
         return null;
     }
