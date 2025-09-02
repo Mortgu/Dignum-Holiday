@@ -2,11 +2,8 @@ import { NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import { SignJWT } from "jose";
 
-import client from '@/app/utils/db';
 import { config, JWT_SECRET } from "@/config";
 
-import permissions from "@/permissions";
-import roles from "@/roles";
 import prisma from "@/app/lib/prisma.js";
 
 export async function POST(request) {

@@ -6,7 +6,7 @@ import { checkAuthentication } from "@/app/lib/authentication.js";
 /** MODIFY USER | [POST] /api/users/[id] */
 export async function POST(request, { params }) {
     const fields = await request.json();
-    const { payload } = await checkAuthentication();
+    const {payload} = await checkAuthentication();
     const { id } = await params;
 
     if (!payload) {

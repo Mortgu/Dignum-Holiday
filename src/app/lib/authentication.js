@@ -4,6 +4,7 @@ import { parseAuthCookie } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { JWT_SECRET } from "@/config";
+import prisma from "@/app/lib/prisma.js";
 
 export async function requirePermission(request, response, permission) {
     const headersList = await headers();
@@ -43,6 +44,39 @@ export function withPermission(handler, permission) {
     }
 }
 
+export function withAuthorization(handler, permission) {
+    return async (request, context) => {
+        const { payload } = await checkAuthentication();
+
+        if (!payload) {
+            return NextResponse.json({
+                error: 'Authorization Required!'
+            }, { status: 401 });
+        }
+
+        let user;
+
+        try {
+            user = await prisma.users.findFirst({
+                where: { id: payload.uid }, include: { roleRelation: true }
+            });
+        } catch (exception) {
+            return NextResponse.json({});
+        }
+
+        const hasPermission = await checkPermission(payload.role, permission);
+        console.log(hasPermission)
+
+        if (!hasPermission ) {
+            return NextResponse.json({
+                error: 'Forbidden!'
+            }, { status: 403 });
+        }
+
+        return handler(request, context, user);
+    }
+}
+
 export async function checkAuthentication() {
     const headersList = await headers();
     const token = parseAuthCookie(headersList.get('cookie'));
@@ -58,6 +92,3 @@ export async function checkAuthentication() {
     }
 }
 
-/*export async function checkPermission(request, response, permission) {
-
-}*/

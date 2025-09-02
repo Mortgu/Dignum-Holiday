@@ -1,28 +1,26 @@
-import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
+import { parseAuthCookie } from "@/app/utils/jwt";
 import { NextResponse } from "next/server";
 import { jwtVerify } from 'jose'
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
-import permissions from "./permissions";
-import roles from "./roles";
-
 const authenticate = async (token) => {
     return await jwtVerify(token, SECRET, {
-        issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE, 
+        issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE,
     });
 }
 
 export async function middleware(request) {
-    const token = parseAuthCookie(request.headers.get('cookie'))
-    const url = request.nextUrl.pathname;
+    const token = parseAuthCookie(request.headers.get('cookie'));
 
     if (!token) {
-        return NextResponse.redirect(new URL('/login', request.url));
+        return NextResponse.json({
+            error: 'Authentication required!'
+        }, { status: 401 });
     }
 
     try {
-        const { payload } = await authenticate(token);
+        const {payload} = await authenticate(token);
 
         if (!payload) {
             const response = NextResponse.redirect(new URL('/login', request.url));

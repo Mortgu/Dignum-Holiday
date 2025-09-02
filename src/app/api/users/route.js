@@ -6,7 +6,7 @@ import { checkAuthentication } from "@/app/lib/authentication.js";
 /** CREATING USERS */
 export async function POST(request) {
     const data = await request.json();
-    const { payload } = await checkAuthentication();
+    const {payload} = await checkAuthentication();
 
     if (!payload) {
         return NextResponse.json({
