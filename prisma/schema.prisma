@@ -38,19 +38,22 @@ model holidays {
   start     DateTime
   end       DateTime
   createdAt DateTime @default(now())
+  user      Int
+  userId    users    @relation(fields: [user], references: [id])
 }
 
 model users {
-  id                  Int       @id @default(autoincrement())
-  email               String    @unique
+  id                  Int        @id @default(autoincrement())
+  email               String     @unique
   firstName           String
   lastName            String
-  entryDate           DateTime  @default(now())
+  entryDate           DateTime   @default(now())
   exitDate            DateTime?
   workingHours        Int
   vacationEntitlement Int
   password            String
   role                Int?
-  roleRelation        roles?    @relation(fields: [role], references: [id])
-  system              Boolean   @default(false)
+  roleRelation        roles?     @relation(fields: [role], references: [id])
+  system              Boolean    @default(false)
+  holidays            holidays[]
 }

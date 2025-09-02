@@ -60,6 +60,22 @@ export default function MyCalendar() {
         setShowModal(false);
     };
 
+    const handleSelectEvent = async (event, e) => {
+        console.log(e.target);
+
+        if (window.confirm(`"${event.title}" wirklich löschen? ${event.id}`)) {
+            const response = await fetch(`/api/calendar/${event.id}`, {
+                method: 'POST',
+                credentials: "include"
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setEvents(events.filter((e) => e.id !== event.id));
+            }
+        }
+    }
+
     return (
         <div className="h-[600px]">
             <Calendar
@@ -70,6 +86,7 @@ export default function MyCalendar() {
                 startAccessor="start"
                 endAccessor="end"
                 style={{height: 500}}
+                onSelectEvent={handleSelectEvent}
             />
 
             {showModal && (

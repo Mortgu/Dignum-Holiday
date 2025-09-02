@@ -21,7 +21,7 @@ export async function POST(request, { params }) {
         }, { status: 500 });
     }
 
-    const hasPermission = await checkPermission(payload.role.id, 'users:modify');
+    const hasPermission = await checkPermission(payload.role, 'users:modify');
 
     if (!hasPermission) {
         return NextResponse.json({

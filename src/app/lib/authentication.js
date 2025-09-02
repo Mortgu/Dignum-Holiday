@@ -21,8 +21,7 @@ export async function requirePermission(request, response, permission) {
             issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE,
         });
 
-        const role = payload.role;
-        const hasPermission = await checkPermission(role.id, permission);
+        const hasPermission = await checkPermission(payload.role, permission);
 
         if (!hasPermission) {
             NextResponse.json({ error: 'er' }, { status: 403 });
