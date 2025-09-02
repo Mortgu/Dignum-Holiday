@@ -46,9 +46,9 @@ export function UsersDisplay({ users, roles }) {
                             <p className='settings-user-name'>{user.workingHours}</p>
                             <p className='settings-user-name'>{user.vacationEntitlement}</p>
 
-                            <select className='settings-user-role' onChange={(event) => handleModifyUserRole(user.id, event)}>
+                            <select className='settings-user-role' value={user.role} onChange={(event) => handleModifyUserRole(user.id, event)}>
                                 {roles.map((role, index) => (
-                                    <option key={index} value={role.id} selected={user.role === role.id}>{role.name}</option>
+                                    <option key={index} value={role.id}>{role.name}</option>
                                 ))}
                             </select>
                         </Fragment>
