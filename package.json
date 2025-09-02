@@ -21,8 +21,10 @@
     "dotenv": "^17.2.1",
     "jose": "^6.0.13",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
     "next": "15.4.6",
     "react": "19.1.0",
+    "react-big-calendar": "^1.19.4",
     "react-dom": "19.1.0",
     "sass": "^1.90.0",
     "zod": "^4.0.17"

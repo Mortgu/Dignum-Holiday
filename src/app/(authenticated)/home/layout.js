@@ -1,10 +1,13 @@
-import TabsComponent from "@/components/tabs/tabs.component";
+import Tabs from "@/components/tabs/tabs.js";
 
-export default function HomeLayout({ children }) {
+export default function HomeLayout({ children, modals }) {
     return (
-        <div className='page'>
-            <TabsComponent />
-            {children}
+        <div>
+            <Tabs />
+            <div className='page'>
+                {children}
+                {modals}
+            </div>
         </div>
     )
 }

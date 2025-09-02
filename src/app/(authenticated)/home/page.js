@@ -4,7 +4,8 @@ import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { withPermission } from "@/app/lib/authentication";
-import TabsComponent from "@/components/tabs/tabs.component";
+
+import MyCalendar from "@/components/calendar/calendar.js";
 
 async function HomePage(request) {
     const headersList = await headers();
@@ -17,7 +18,7 @@ async function HomePage(request) {
 
     return (
         <div className="page">
-
+            <MyCalendar />
         </div>
     )
 }

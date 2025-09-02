@@ -1,5 +1,5 @@
-@use 'abstract/typographie' as typographie;
-@use 'layouts/layouts.scss' as layout;
+@import 'abstract/typographie';
+@import 'layouts/layouts.scss';
 
 html, body {
   margin: 0;

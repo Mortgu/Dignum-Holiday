@@ -4,7 +4,7 @@ import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { withPermission } from "@/app/lib/authentication";
-import TabsComponent from "@/components/tabs/tabs.component";
+import Tabs from "@/components/tabs/tabs.js";
 
 async function Test2Page(request) {
     const headersList = await headers();

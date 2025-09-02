@@ -1,0 +1,33 @@
+.tab-navigation {
+  display: flex;
+
+  width: 100%;
+  height: auto;
+
+  border-bottom: 1px solid black;
+
+  .tab-navigation-item {
+    padding: 14px 16px;
+
+    position: relative;
+
+    &:after {
+      content: ' ';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: red;
+      bottom: 0;
+      left: 0;
+
+      visibility: hidden;
+    }
+
+    &.active {
+      &:after {
+        visibility: visible;
+
+      }
+    }
+  }
+}
