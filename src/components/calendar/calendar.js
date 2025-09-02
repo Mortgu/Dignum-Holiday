@@ -5,7 +5,7 @@ import './calendar.scss';
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 
 const localizer = momentLocalizer(moment);
@@ -17,14 +17,30 @@ export default function MyCalendar() {
         title: "", start: null, end: null,
     });
 
-    const handleSelectSlot = ({start, end}) => {
-        /*const title = window.prompt("Termin-Titel:");
-        if (title) {
-            setEvents([...events, {start, end, title}]);
-        }*/
+    useEffect(() => {
+        fetch('/api/calendar', {
+            method: 'GET',
+            credentials: "include"
+        }).then(response => response.json()).then(data => {
+            setEvents(data.map(entry => ({
+                ...entry, start: new Date(entry.start), end: new Date(entry.end)
+            })))
+        });
+    }, []);
 
-        setNewEvent({ title: "", start, end });
-        setShowModal(true);
+    const handleSelectSlot = async ({start, end}) => {
+        const title = window.prompt("Title: ");
+        if (!title) return;
+
+        const response = await fetch('/api/calendar', {
+            method: 'POST',
+            credentials: "include",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({title, start, end})
+        });
+
+        const newEvent = await response.json();
+        setEvents([...events, {...newEvent, start: new Date(newEvent.start), end: new Date(newEvent.end)}]);
     };
 
     const handleSave = async () => {
@@ -33,13 +49,13 @@ export default function MyCalendar() {
         const res = await fetch("/api/appointments", {
             method: "POST",
             body: JSON.stringify(newEvent),
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         });
 
         const saved = await res.json();
         setEvents([
             ...events,
-            { ...saved, start: new Date(saved.start), end: new Date(saved.end) },
+            {...saved, start: new Date(saved.start), end: new Date(saved.end)},
         ]);
         setShowModal(false);
     };
@@ -66,7 +82,7 @@ export default function MyCalendar() {
                             type="text"
                             placeholder="Titel"
                             value={newEvent.title}
-                            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+                            onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
                             className="w-full border p-2 rounded mb-4"
                         />
                         <div className="flex justify-end space-x-2">

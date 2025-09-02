@@ -32,6 +32,14 @@ model roles {
   RolePermission role_permissions[]
 }
 
+model holidays {
+  id        Int      @id @default(autoincrement())
+  title     String
+  start     DateTime
+  end       DateTime
+  createdAt DateTime @default(now())
+}
+
 model users {
   id                  Int      @id @default(autoincrement())
   email               String   @unique
