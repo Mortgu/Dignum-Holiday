@@ -49,7 +49,9 @@ export async function POST(request) {
  * @constructor
  */
 export async function GET(request) {
-    const holidays = await prisma.holidays.findMany();
+    const holidays = await prisma.holidays.findMany({
+        include: {userId: true}
+    });
     return NextResponse.json(holidays);
 }
 

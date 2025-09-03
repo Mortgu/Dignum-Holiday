@@ -5,7 +5,6 @@ import { headers } from "next/headers";
 import Navigation from "@/components/navigation/navigation.component";
 import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { redirect } from "next/navigation";
-import Link from "next/link.js";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -23,21 +22,16 @@ export const metadata = {
 };
 
 export default async function RootLayout({children}) {
-    const headersList = await headers();
-    const token = parseAuthCookie(headersList.get('cookie'));
-    const payload = token ? verifyToken(token) : null;
-
-    if (!payload) {
-        redirect('/login');
-    }
 
     return (
-        <div className='layout'>
-            <Navigation payload={payload}/>
-
-            <div className='content'>
+        <html lang="de">
+            <head>
+                <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+                <title>{metadata.title}</title>
+            </head>
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 {children}
-            </div>
-        </div>
+            </body>
+        </html>
     );
 }

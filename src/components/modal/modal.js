@@ -1,13 +1,36 @@
+'use client';
+
+import './modal.scss';
+
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Modal({ children }) {
+export function Modal({children}) {
     const router = useRouter();
+    const dialogRef = useRef(null);
+
+    useEffect(() => {
+        if (!dialogRef.current?.open) {
+            dialogRef.current?.showModal();
+        }
+    }, []);
+
+    function onDismiss() {
+        router.back();
+    }
 
     return (
-        <button
-            onClick={() => router.back()}
-            aria-label="Close"
-            className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-        >button</button>
-    )
+        <div className="modal-backdrop">
+            <dialog ref={dialogRef} className="modal" onClose={onDismiss}>
+                <div className='modal-header'>
+                    <h3>Add Calendar Entry</h3>
+                    <button onClick={onDismiss} className="close-button">
+                        <span className="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                {children}
+            </dialog>
+        </div>
+    );
 }

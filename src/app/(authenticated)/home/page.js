@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { withPermission } from "@/app/lib/authentication";
 
 import MyCalendar from "@/components/calendar/calendar.js";
+import Link from "next/link";
 
 async function HomePage(request) {
     const headersList = await headers();
@@ -17,9 +18,10 @@ async function HomePage(request) {
     }
 
     return (
-        <div className="page">
-            <MyCalendar />
-        </div>
+        <>
+            <div><MyCalendar /></div>
+            <Link href="/home/new">Neuen Kalendereintrag erstellen</Link>
+        </>
     )
 }
 

@@ -7,15 +7,20 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { useRouter } from "next/navigation";
+import { useModalData } from "@/app/(authenticated)/home/context.js";
 
 const localizer = momentLocalizer(moment);
 
 export default function MyCalendar() {
+    const router = useRouter();
     const [events, setEvents] = useState();
     const [showModal, setShowModal] = useState(false);
     const [newEvent, setNewEvent] = useState({
         title: "", start: null, end: null,
     });
+
+    const { setModalData } = useModalData();
 
     useEffect(() => {
         fetch('/api/calendar', {
@@ -29,7 +34,10 @@ export default function MyCalendar() {
     }, []);
 
     const handleSelectSlot = async ({start, end}) => {
-        const title = window.prompt("Title: ");
+        setModalData({ start, end });
+        router.push(`/home/new`);
+
+        /*const title = window.prompt("Title: ");
         if (!title) return;
 
         const response = await fetch('/api/calendar', {
@@ -41,7 +49,9 @@ export default function MyCalendar() {
 
         const newEvent = await response.json();
         setEvents([...events, {...newEvent, start: new Date(newEvent.start), end: new Date(newEvent.end)}]);
+        **/
     };
+
 
     const handleSave = async () => {
         if (!newEvent.title || !newEvent.start || !newEvent.end) return;
@@ -85,6 +95,9 @@ export default function MyCalendar() {
                 endAccessor="end"
                 style={{height: 500}}
                 onSelectEvent={handleSelectEvent}
+                components={{
+                    event: CustomEvent,
+                }}
             />
 
             {showModal && (
@@ -117,6 +130,14 @@ export default function MyCalendar() {
                     </div>
                 </div>
             )}
+        </div>
+    );
+}
+
+const CustomEvent = ({ event }) => {
+    return (
+        <div style={{padding: '5px'}}>
+            <strong>{event.title} - {event.userId.firstName} {event.userId.lastName}</strong>
         </div>
     );
 }
