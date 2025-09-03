@@ -3,6 +3,7 @@ import RoleCreationForm from "@/components/settings/RoleCreationForm.js";
 import { RoleContextProvider } from "@/components/settings/roles.display.js";
 import RoleSettings from "@/components/settings/RoleSettings.js";
 import Users from "@/components/settings/users.js";
+import RoleSettingSection from "@/components/settings/roles.js";
 
 export default async function AdminSettingsPage() {
     const roles = await prisma.roles.findMany({
@@ -19,20 +20,7 @@ export default async function AdminSettingsPage() {
 
     return (
         <div>
-            <Permission permission='roles:create'>
-                <fieldset>
-                    <legend>Role Creation</legend>
-                    <RoleCreationForm permissions={permissions} />
-                </fieldset>
-            </Permission>
-            <Permission permission='roles:modify'>
-                <fieldset>
-                    <legend>Roles</legend>
-                    <RoleContextProvider>
-                        <RoleSettings roles={roles} permissions={permissions}/>
-                    </RoleContextProvider>
-                </fieldset>
-            </Permission>
+            <RoleSettingSection roles={roles} permissions={permissions} />
 
             <Permission permission='users:create'>
                 <Users users={users} roles={roles} />

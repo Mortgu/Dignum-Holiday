@@ -65,7 +65,6 @@ export function withAuthorization(handler, permission) {
         }
 
         const hasPermission = await checkPermission(payload.role, permission);
-        console.log(hasPermission)
 
         if (!hasPermission ) {
             return NextResponse.json({
@@ -73,7 +72,7 @@ export function withAuthorization(handler, permission) {
             }, { status: 403 });
         }
 
-        return handler(request, context, user);
+        return handler(await request.json(), context, user);
     }
 }
 

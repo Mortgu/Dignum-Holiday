@@ -39,7 +39,10 @@ export default async function RootLayout({children}) {
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
              <div className='layout'>
                  <Navigation payload={payload} />
-                 {children}
+
+                 <div className='content'>
+                     {children}
+                 </div>
              </div>
             </body>
         </html>

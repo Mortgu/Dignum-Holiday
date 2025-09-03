@@ -11,11 +11,16 @@ html, body {
   box-sizing: border-box;
 }
 
+.content {
+  display: grid;
+  height: fit-content;
+
+  overflow: hidden;
+}
+
 .page {
-  grid-area: content;
-
-  overflow: scroll;
-
+  height: 100%;
+  overflow: auto;
   padding: 1rem;
 
   &::-webkit-scrollbar {
