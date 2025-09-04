@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import PermissionCheckbox from "@/components/settings/PermissionCheckbox.js";
+import { useState } from "react";
 
 export default function RoleSettingSection({roles, permissions}) {
     const [error, setError] = useState(null);
@@ -17,8 +16,8 @@ export default function RoleSettingSection({roles, permissions}) {
         const response = await fetch('/api/roles', {
             method: 'POST',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ roleName: newRoleName, list: newRolePermissions })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({roleName: newRoleName, list: newRolePermissions})
         });
 
         const data = await response.json();
@@ -45,7 +44,7 @@ export default function RoleSettingSection({roles, permissions}) {
                 } else {
                     newPerms = r.RolePermission.filter(p => p.permission !== permission.id);
                 }
-                return { ...r, RolePermission: newPerms };
+                return {...r, RolePermission: newPerms};
             }
 
             return r;
@@ -56,8 +55,8 @@ export default function RoleSettingSection({roles, permissions}) {
         const response = await fetch(`/api/roles/${role.id}/`, {
             method: 'PATCH',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ permission, checked })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({permission, checked})
         });
 
         const data = await response.json();
@@ -67,7 +66,6 @@ export default function RoleSettingSection({roles, permissions}) {
             setRoleList(roleList);
             return;
         }
-
 
 
     }
@@ -88,65 +86,6 @@ export default function RoleSettingSection({roles, permissions}) {
     }
 
     return (
-        <div className='setting-section role-setting-section'>
-            {/* Role creation form */}
-            <fieldset className='role-setting-form-section'>
-                <legend>Create</legend>
-                {error && (<p>{error}</p>)}
-                <form className='role-setting-form' method='POST' onSubmit={handleFormSubmit}>
-                    <input type='text' name='name' value={newRoleName} onChange={e => setNewRoleName(e.target.value)}
-                           placeholder='Role name'/>
-
-                    <button type='submit'>Create</button>
-
-                    <fieldset className='role-setting-permission-section'>
-
-                        {permissions.map((permission, index) => (
-                            <label key={index}>
-                                <input type='checkbox'
-                                       name='permission'
-                                       value={permission.id}
-                                />
-
-                                {permission.name}
-                            </label>
-                        ))}
-
-                    </fieldset>
-                </form>
-
-            </fieldset>
-
-            {/* Roles display */}
-            <fieldset className='role-setting-display-section'>
-                <legend>Roles</legend>
-                <div className='role-display-flex' style={{display: 'flex', flexWrap: 'wrap'}}>
-                    {roleList.map((role, index) => (
-                        <fieldset key={role.id} style={{flex: '1'}}>
-                            <legend>{role.name}</legend>
-                            {permissions.map(permission => {
-                                const hasPermission = !!role.RolePermission.find(p => p.permission === permission.id);
-                                return (
-                                    <PermissionCheckbox
-                                        key={permission.id}
-                                        checked={hasPermission}
-                                        onChange={(event) => handleEditRolePerms(role, permission, event)}
-                                        id={permission.id}
-                                        displayName={permission.name}
-                                        disabled={role.system}
-                                    />
-                                )
-                            })}
-
-                            {!role.system && (
-                                <button onClick={() => handleRoleDeletion(role)}>Delete Role</button>
-                            )}
-                        </fieldset>
-                    ))}
-                </div>
-            </fieldset>
-
-
-        </div>
+        <></>
     )
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma.js";
 import { checkPermission } from "@/app/lib/permissions.js";
-import { checkAuthentication } from "@/app/lib/authentication.js";
+import { checkAuthentication, withAuthorization } from "@/app/lib/authentication.js";
 
 /** MODIFY USER | [POST] /api/users/[id] */
 export async function POST(request, { params }) {
@@ -47,3 +47,20 @@ export async function POST(request, { params }) {
         }, { status: 500 });
     }
 }
+
+async function getUser(request, { params }) {
+    const { id } = await params;
+    try {
+        const data = await prisma.users.findFirst({
+            where: { id: parseInt(id) }
+        });
+
+        return NextResponse.json(data);
+    } catch (exception) {
+        return NextResponse.json({
+            error: 'Something went wrong trying to fetch user!'
+        }, { status: 500 });
+    }
+}
+
+export const GET = withAuthorization(getUser, 'users:modify');

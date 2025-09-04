@@ -72,7 +72,7 @@ export function withAuthorization(handler, permission) {
             }, { status: 403 });
         }
 
-        return handler(await request.json(), context, user);
+        return handler(request, context, user);
     }
 }
 

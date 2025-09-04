@@ -35,7 +35,7 @@ export default function MyCalendar() {
 
     const handleSelectSlot = async ({start, end}) => {
         setModalData({ start, end });
-        router.push(`/home/new`);
+        router.push(`/calendar/new`);
 
         /*const title = window.prompt("Title: ");
         if (!title) return;
@@ -71,7 +71,9 @@ export default function MyCalendar() {
     };
 
     const handleSelectEvent = async (event, e) => {
-        if (window.confirm(`"${event.title}" wirklich löschen? ${event.id}`)) {
+        router.push(`/calendar/edit?id=${event.id}`);
+
+        /*if (window.confirm(`"${event.title}" wirklich löschen? ${event.id}`)) {
             const response = await fetch(`/api/calendar/${event.id}`, {
                 method: 'POST',
                 credentials: "include"
@@ -81,7 +83,7 @@ export default function MyCalendar() {
                 const data = await response.json();
                 setEvents(events.filter((e) => e.id !== event.id));
             }
-        }
+        }*/
     }
 
     return (

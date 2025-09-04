@@ -1,5 +1,3 @@
-import '@/app/resources/app.scss';
-
 import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -20,7 +18,6 @@ async function HomePage(request) {
     return (
         <>
             <div><MyCalendar /></div>
-            <Link href="/home/new">Neuen Kalendereintrag erstellen</Link>
         </>
     )
 }

@@ -6,8 +6,7 @@ export default function HomeLayout({ children, modal }) {
     return (
         <div>
             <TabsNavigation>
-                <TabsItem href='/home'>Home</TabsItem>
-                <TabsItem href='/home/test'>Test</TabsItem>
+                <TabsItem href='/home'>Calendar</TabsItem>
             </TabsNavigation>
 
             <ModalDataProvider>

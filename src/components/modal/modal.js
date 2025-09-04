@@ -2,10 +2,18 @@
 
 import './modal.scss';
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-export function Modal({children}) {
+export function Modal({ title, children }) {
     const router = useRouter();
     const dialogRef = useRef(null);
 
@@ -15,22 +23,24 @@ export function Modal({children}) {
         }
     }, []);
 
-    function onDismiss() {
+    const handleOnOpenChange = (open) => {
         router.back();
-    }
+        if (!open) {
+
+        }
+    };
 
     return (
-        <div className="modal-backdrop">
-            <dialog ref={dialogRef} className="modal" onClose={onDismiss}>
-                <div className='modal-header'>
-                    <h3>Add Calendar Entry</h3>
-                    <button onClick={onDismiss} className="close-button">
-                        <span className="material-symbols-outlined">close</span>
-                    </button>
-                </div>
 
+        <Dialog open onOpenChange={handleOnOpenChange}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{title}</DialogTitle>
+                </DialogHeader>
                 {children}
-            </dialog>
-        </div>
+            </DialogContent>
+        </Dialog>
+
+
     );
 }

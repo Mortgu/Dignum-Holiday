@@ -1,24 +1,24 @@
-import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import LogoutButton from "@/app/(authenticated)/dashboard/LogoutButton";
-import Navigation from "@/components/navigation/navigation.component";
-import { withPermission } from "@/app/lib/authentication";
+import { ChartAreaInteractive } from "@/components/chart-area-interactive"
+import { DataTable } from "@/components/data-table"
+import { SectionCards } from "@/components/section-cards"
+import { SiteHeader } from "@/components/site-header"
+import { SidebarInset } from "@/components/ui/sidebar"
 
-async function DashboardPage(request) {
-    const headersList = await headers();
-    const token = parseAuthCookie(headersList.get('cookie'));
-    const payload = token ? verifyToken(token) : null;
+import data from "./data.json"
 
-    if (!payload) {
-        redirect('/login');
-    }
-
+export default function DashboardPage() {
     return (
-        <div className="page">
-            <LogoutButton/>
-        </div>
+        <SidebarInset>
+            <SiteHeader title='Dashboard' />
+            <div className="flex flex-1 flex-col">
+                <div className="@container/main flex flex-1 flex-col gap-2">
+                    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+                        <SectionCards/>
+
+                        <DataTable data={data}/>
+                    </div>
+                </div>
+            </div>
+        </SidebarInset>
     )
 }
-
-export default withPermission(DashboardPage, 'dashboard:view');

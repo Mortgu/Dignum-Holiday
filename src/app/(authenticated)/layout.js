@@ -1,11 +1,12 @@
-import '@/app/resources/app.scss';
-
 import { Geist, Geist_Mono } from "next/font/google";
 import { headers } from "next/headers";
-import Navigation from "@/components/navigation/navigation.component";
+
 import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
 import { redirect } from "next/navigation";
-import Link from "next/link.js";
+
+import { AppSidebar } from "@/components/app-sidebar"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.jsx";
+import { ModalDataProvider } from "@/app/(authenticated)/home/context.js";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -32,12 +33,11 @@ export default async function RootLayout({children}) {
     }
 
     return (
-        <div className='layout'>
-            <Navigation payload={payload}/>
-
-            <div className='content'>
+        <SidebarProvider style={{ "--sidebar-width": "calc(var(--spacing) * 72)", "--header-height": "calc(var(--spacing) * 12)", }}>
+            <AppSidebar variant="inset" />
+            <ModalDataProvider>
                 {children}
-            </div>
-        </div>
+            </ModalDataProvider>
+        </SidebarProvider>
     );
 }

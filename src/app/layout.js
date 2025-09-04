@@ -1,10 +1,6 @@
-import '@/app/resources/app.scss';
+import '@/app/app.css';
 
 import { Geist, Geist_Mono } from "next/font/google";
-import { headers } from "next/headers";
-import Navigation from "@/components/navigation/navigation.component";
-import { parseAuthCookie, verifyToken } from "@/app/utils/jwt";
-import { redirect } from "next/navigation";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
