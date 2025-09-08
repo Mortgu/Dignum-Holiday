@@ -12,9 +12,19 @@ export function CreateUserForm({ roles }) {
 
     const form = useForm({
         resolver: zodResolver(userFormSchema),
+        defaultValues: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            role: 1,
+            workingHours: 0,
+            vacationEntitlement: 0,
+            salary: 0,
+        }
     });
 
     const onSubmit = async (values) => {
+        console.log(values)
         const response = await fetch('/api/users/', {
             method: 'POST',
             credentials: "include",

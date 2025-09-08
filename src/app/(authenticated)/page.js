@@ -1,13 +1,7 @@
-import { withPermission } from "@/app/lib/authentication";
 import { SiteHeader } from "@/components/site-header.jsx";
-import { SectionCards } from "@/components/section-cards.jsx";
-import { DataTable } from "@/components/data-table.jsx";
 import { SidebarInset } from "@/components/ui/sidebar.jsx";
 
-import data from "./data.json"
-
-
-async function HomePage(request) {
+export default async function HomePage() {
     return (
         <SidebarInset>
             <SiteHeader title='Dashboard' />
@@ -23,5 +17,3 @@ async function HomePage(request) {
         </SidebarInset>
     )
 }
-
-export default withPermission(HomePage, 'home:view')

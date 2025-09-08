@@ -18,7 +18,7 @@ export function ProfileForm({user, roles}) {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            role: user.roleRelation.name,
+            role: user.role,
             workingHours: user.workingHours,
             vacationEntitlement: user.vacationEntitlement,
             salary: user.salary
@@ -28,6 +28,7 @@ export function ProfileForm({user, roles}) {
     // 2. Define a submit handler.
     async function onSubmit(values) {
         const id = user.id;
+        console.log(values)
 
         const response = await fetch(`/api/users/${id}`, {
             method: 'POST',

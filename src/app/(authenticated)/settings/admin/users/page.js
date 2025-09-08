@@ -5,7 +5,7 @@ import prisma from "@/app/lib/prisma.js";
 
 export default async function Page() {
     const users = await prisma.users.findMany({
-        include: {roleRelation: true}
+        include: {roleRelation: true}, where: { system: false },
     });
 
     return (

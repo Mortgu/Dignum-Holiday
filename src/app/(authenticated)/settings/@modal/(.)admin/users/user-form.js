@@ -6,6 +6,7 @@ export const userFormSchema = z.object({
     }),
     lastName: z.string(),
     email: z.email(),
+    role: z.coerce.number().int(),
 
     workingHours: z.coerce.number().int().min(1),
     salary: z.coerce.number().min(0),
