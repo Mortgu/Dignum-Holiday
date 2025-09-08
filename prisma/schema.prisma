@@ -51,6 +51,7 @@ model users {
   exitDate            DateTime?
   workingHours        Int
   vacationEntitlement Int
+  salary              Float      @default(0.0)
   password            String
   role                Int?
   roleRelation        roles?     @relation(fields: [role], references: [id])

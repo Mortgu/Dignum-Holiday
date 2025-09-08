@@ -14,7 +14,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
-import { useModalData } from "@/app/(authenticated)/home/context.js";
+import { useModalData } from "@/app/(authenticated)/model.context.js";
 
 export const columns = [
     {
@@ -68,7 +68,18 @@ export const columns = [
 
             const handleClickEdit = () => {
                 setModalData({ user: row.original });
-                router.push(`/settings/admin/users/edit?id=${row.original.id}`)
+                router.push(`/settings/admin/users/${row.original.id}/edit`);
+            }
+
+            const handleClickDelete = async () => {
+                const response = await fetch(`/api/users/${row.original.id}`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    router.refresh();
+                }
             }
 
             return (
@@ -93,7 +104,9 @@ export const columns = [
                         <DropdownMenuItem onClick={handleClickEdit}>
                             Edit user
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Delete user</DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleClickDelete}>
+                            Delete user
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

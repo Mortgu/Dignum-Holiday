@@ -105,7 +105,7 @@ export const schema = z.object({
 })
 
 // Create a separate component for the drag handle
-function DragHandle({ id }) {
+function DragHandle({id}) {
     const {attributes, listeners} = useSortable({
         id,
     })

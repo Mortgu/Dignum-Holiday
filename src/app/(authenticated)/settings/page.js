@@ -1,7 +1,7 @@
 import { withPermission } from "@/app/lib/authentication.js";
 import { SiteHeader } from "@/components/site-header.jsx";
 import { DataTable } from "@/components/data-table.jsx";
-import data from "@/app/(authenticated)/dashboard/data.json";
+import data from "@/app/(authenticated)/data.json";
 import { SidebarInset } from "@/components/ui/sidebar.jsx";
 
 async function SettingsPage() {

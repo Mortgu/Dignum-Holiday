@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar.jsx";
-import { ModalDataProvider } from "@/app/(authenticated)/home/context.js";
+import { ModalDataProvider } from "@/app/(authenticated)/model.context.js";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

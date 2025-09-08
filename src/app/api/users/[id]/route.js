@@ -4,55 +4,34 @@ import { checkPermission } from "@/app/lib/permissions.js";
 import { checkAuthentication, withAuthorization } from "@/app/lib/authentication.js";
 
 /** MODIFY USER | [POST] /api/users/[id] */
-export async function POST(request, { params }) {
-    const fields = await request.json();
-    const {payload} = await checkAuthentication();
-    const { id } = await params;
-
-    if (!payload) {
-        return NextResponse.json({
-            error: 'You are not authenticated!'
-        }, { status: 403 });
-    }
-
-    if (!fields) {
-        return NextResponse.json({
-            error: 'Failed to receive body.'
-        }, { status: 500 });
-    }
-
-    const hasPermission = await checkPermission(payload.role, 'users:modify');
-
-    if (!hasPermission) {
-        return NextResponse.json({
-            error: 'You are not allowed to perform this action!'
-        }, { status: 403 });
-    }
-
-    const user = await prisma.users.findMany({
-        where: { id: parseInt(id) }, include: { roleRelation: true }
-    });
+const modifyUser = async (body, context, user) => {
+    const { id } = await context.params;
+    const fields = await body.json();
 
     try {
-        const data = await prisma.users.updateMany({
+        const updatedUser = await prisma.users.updateMany({
             where: { id: parseInt(id) }, data: {
                 ...fields
             }
         });
 
-        return NextResponse.json(data);
+        return NextResponse.json(updatedUser);
     } catch (exception) {
         return NextResponse.json({
-            error: 'Something went wrong trying to update user fields!'
+            error: 'Something went wrong trying to update user!',
+            exception: exception
         }, { status: 500 });
     }
 }
 
-async function getUser(request, { params }) {
-    const { id } = await params;
+export const POST = withAuthorization(modifyUser, 'users:modify');
+
+const getUser = async (body, context, user) => {
+    const { id } = await context.params;
+
     try {
         const data = await prisma.users.findFirst({
-            where: { id: parseInt(id) }
+            where: { id: parseInt(id) }, include: { roleRelation: true }
         });
 
         return NextResponse.json(data);
@@ -63,4 +42,23 @@ async function getUser(request, { params }) {
     }
 }
 
-export const GET = withAuthorization(getUser, 'users:modify');
+export const GET = withAuthorization(getUser, 'users:view');
+
+
+const deleteUser = async (body, context, user) => {
+    const { id } = await context.params;
+
+    try {
+        const deleteUser = await prisma.users.deleteMany({
+            where: { id: parseInt(id) }
+        });
+
+        return NextResponse.json(deleteUser);
+    } catch (exception) {
+        return NextResponse.json({
+            error: 'Something went wrong trying to delete user!'
+        }, { status: 500 });
+    }
+}
+
+export const DELETE = withAuthorization(deleteUser, 'users:delete');

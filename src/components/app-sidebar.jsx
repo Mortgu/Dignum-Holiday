@@ -46,7 +46,7 @@ const data = {
     navMain: [
         {
             title: "Dashboard",
-            url: "/dashboard",
+            url: "/",
             icon: IconDashboard,
         },
         {
@@ -71,6 +71,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }) {
+
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>

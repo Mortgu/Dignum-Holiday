@@ -1,7 +1,7 @@
 'use client'
 
 import { Modal } from "@/components/modal/modal.js";
-import { useModalData } from "@/app/(authenticated)/home/context.js";
+import { useModalData } from "@/app/(authenticated)/model.context.js";
 
 export default function Page({ children, params }) {
     const { modalData } = useModalData();

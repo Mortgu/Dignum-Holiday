@@ -1,48 +1,18 @@
 import { NextResponse } from "next/server";
+import { withAuthorization } from "@/app/lib/authentication.js";
 import prisma from "@/app/lib/prisma.js";
-import { checkPermission } from "@/app/lib/permissions.js";
-import { checkAuthentication } from "@/app/lib/authentication.js";
 
 /** CREATING USERS */
-export async function POST(request) {
-    const data = await request.json();
-    const {payload} = await checkAuthentication();
-
-    if (!payload) {
-        return NextResponse.json({
-            error: 'You are not authenticated!'
-        }, { status: 403 });
-    }
-
-    if (!data) {
-        return NextResponse.json({
-            error: 'Failed to receive body.'
-        }, { status: 500 });
-    }
-
-    const hasPermission = await checkPermission(payload.role.id, 'users:create');
-
-    if (!hasPermission) {
-        return NextResponse.json({
-            error: 'You are not allowed to perform this action!'
-        }, { status: 403 });
-    }
+const handler = async (body, context, user) => {
+    const fields = await body.json();
+    console.log(fields);
 
     try {
-        const userData = await prisma.users.create({
-            data: {
-                email: data.email,
-
-                firstName: data.firstName,
-                lastName: data.lastName,
-
-                workingHours: parseInt(data.workingHours),
-                vacationEntitlement: parseInt(data.vacationEntitlement),
-                password: data.password,
-            }
+        const createdUser = await prisma.users.create({
+            data: { ...fields }
         });
 
-        return NextResponse.json(userData);
+        return NextResponse.json(createdUser);
     } catch (exception) {
         console.error(exception.message);
         return NextResponse.json({
@@ -50,3 +20,5 @@ export async function POST(request) {
         }, { status: 500 });
     }
 }
+
+export const POST = withAuthorization(handler, 'users:create');

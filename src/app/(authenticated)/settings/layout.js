@@ -1,7 +1,7 @@
 import { SettingsContextProvider } from "@/components/settings/settings.js";
 import { SiteHeader } from "@/components/site-header.jsx";
 import { SidebarInset } from "@/components/ui/sidebar.jsx";
-import { ModalDataProvider } from "@/app/(authenticated)/home/context.js";
+import { ModalDataProvider } from "@/app/(authenticated)/model.context.js";
 
 
 export default function SettingsLayout({ children, modal }) {

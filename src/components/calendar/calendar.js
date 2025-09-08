@@ -8,7 +8,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/navigation";
-import { useModalData } from "@/app/(authenticated)/home/context.js";
+import { useModalData } from "@/app/(authenticated)/model.context.js";
 
 const localizer = momentLocalizer(moment);
 
