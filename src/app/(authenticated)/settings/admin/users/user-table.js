@@ -1,40 +1,56 @@
-"use client";
+'use client';
 
-import {
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-    getPaginationRowModel
-} from "@tanstack/react-table"
-import { Button } from "@/components/ui/button"
+import { flexRender, getCoreRowModel, useReactTable, getPaginationRowModel } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import { IconPlus } from "@tabler/icons-react";
-import { Tabs } from "@/components/ui/tabs.jsx";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
+
+import { IconPlus, IconRefresh } from "@tabler/icons-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export function DataTable({columns, data}) {
+export default function UserTable({ columns }) {
+    const [users, setUsers] = useState([]);
+
     const table = useReactTable({
-        data, columns, getCoreRowModel: getCoreRowModel(),
+        data: users ?? [], columns, getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
     });
+
+    const fetchData = async () => {
+        const response = await fetch('/api/users', {
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        const body = await response.json();
+
+        if (response.ok) {
+            setUsers(body);
+            console.log(body);
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <div className="grid items-center px-4 lg:px-6 gap-4">
             <div className="flex justify-start gap-2">
+
                 <Link href='/settings/admin/users/create'>
                     <Button variant="outline" size="sm">
                         <IconPlus/>
                         <span className="hidden lg:inline">Create User</span>
                     </Button>
                 </Link>
+
+                <Button variant="outline" size="sm" onClick={fetchData}>
+                    <IconRefresh/>
+                    <span className="hidden lg:inline">Refresh</span>
+                </Button>
+
             </div>
 
             <div className="overflow-hidden rounded-md border">
@@ -83,7 +99,7 @@ export function DataTable({columns, data}) {
                     Previous
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}>
+                        disabled={!table.getCanNextPage()}>
                     Next
                 </Button>
             </div>

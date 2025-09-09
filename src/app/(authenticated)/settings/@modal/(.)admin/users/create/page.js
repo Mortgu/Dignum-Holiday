@@ -11,12 +11,11 @@ export default async function Page() {
     const token = parseAuthCookie(headersList.get('cookie'));
     const user = token ? verifyToken(token) : null;
 
-    // 2. Rollen abrufen, deren ID kleiner ist als die Rolle des aktuellen Benutzers
-    //    (Annahme: user.roleId ist im Token-Payload verfügbar)
+    console.log(user)
     const roles = await prisma.roles.findMany({
         where: {
             system: false,
-            id: { gt: user?.role }
+            id: { gt: user.role.id }
         }
     });
 
