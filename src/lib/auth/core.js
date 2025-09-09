@@ -2,7 +2,7 @@ import { parseAuthCookie } from "@/app/utils/jwt.js";
 import { headers } from "next/headers";
 import { jwtVerify } from "jose";
 import { JWT_SECRET } from "@/config.js";
-import { checkPermission } from "@/app/lib/permissions.js";
+import { checkPermission } from "@/lib/auth/permissions.js";
 
 export class AuthenticationError extends Error {
     constructor(message, status = 401) {
@@ -57,6 +57,10 @@ export async function authorize(permission, user = null, payload = null) {
         const auth = await authenticate();
         user = auth.user;
         payload = auth.payload;
+    }
+
+    if (user.roleRelation.system) {
+        return { user, payload };
     }
 
     const hasPermission = await checkPermission(payload.role, permission);

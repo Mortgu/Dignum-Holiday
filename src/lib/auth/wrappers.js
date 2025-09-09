@@ -38,6 +38,8 @@ export async function withPageAuth(permission = null, redirectTo = '/login') {
     try {
         return await requireAuth(permission);
     } catch (error) {
+        console.log(error);
+
         if (error instanceof AuthenticationError) {
             redirect(redirectTo);
         }

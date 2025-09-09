@@ -10,6 +10,12 @@ export default async function Permission({ permission, children }) {
         )
     }
 
+    console.log(user, payload)
+
+    if (user.roleRelation.system) {
+        return <>{children}</>;
+    }
+
     const getPermissions = await prisma.role_permissions.findMany({
         include: { permissionRelation: true }, where: { role: payload.role.id }
     });
