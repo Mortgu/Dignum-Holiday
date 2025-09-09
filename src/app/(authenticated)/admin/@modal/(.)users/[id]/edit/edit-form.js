@@ -2,11 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from 'zod';
 
 import { useRouter } from "next/navigation.js";
 import UserForm from "@/components/user-form.js";
-import { userFormSchema } from "@/app/(authenticated)/settings/@modal/(.)admin/users/user-form.js";
+import { userFormSchema } from "@/app/(authenticated)/admin/@modal/(.)users/user-form.js";
 
 
 export function ProfileForm({user, roles}) {
@@ -21,7 +20,8 @@ export function ProfileForm({user, roles}) {
             role: user.role,
             workingHours: user.workingHours,
             vacationEntitlement: user.vacationEntitlement,
-            salary: user.salary
+            salary: user.salary,
+            password: user.password,
         },
     });
 

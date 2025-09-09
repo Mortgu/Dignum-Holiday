@@ -23,9 +23,9 @@ export default function UserTable({ columns }) {
             credentials: 'include',
         });
 
-        const body = await response.json();
-
         if (response.ok) {
+            const body = await response.json();
+
             setUsers(body);
             console.log(body);
         }
@@ -39,7 +39,7 @@ export default function UserTable({ columns }) {
         <div className="grid items-center px-4 lg:px-6 gap-4">
             <div className="flex justify-start gap-2">
 
-                <Link href='/settings/admin/users/create'>
+                <Link href='/admin/users/create'>
                     <Button variant="outline" size="sm">
                         <IconPlus/>
                         <span className="hidden lg:inline">Create User</span>

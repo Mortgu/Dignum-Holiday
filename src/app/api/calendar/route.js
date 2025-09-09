@@ -1,33 +1,11 @@
 import prisma from "@/app/lib/prisma.js";
 import { NextResponse } from "next/server";
-import { checkAuthentication } from "@/app/lib/authentication.js";
-import { checkPermission } from "@/app/lib/permissions.js";
+import { withAuth } from "@/lib/auth/wrappers.js";
 
-/**
- * /api/calendar
- *
- * @param request
- * @returns {Promise<void>}
- * @constructor
- */
-export async function POST(request) {
-    const { payload } = await checkAuthentication();
-
-    if (!payload) {
-        return NextResponse.json({
-            error: 'You are not authenticated!'
-        }, { status: 403 });
-    }
-
-    const hasPermission = await checkPermission(payload.role, "calendar:create");
-
-    if (!hasPermission) {
-        return NextResponse.json({
-            error: 'You are not allowed to perform this action!'
-        }, { status: 403 });
-    }
-
+async function calendarPost(request, context, { user, payload }) {
     const data = await request.json();
+
+    console.log(data);
 
     try {
         const holiday = await prisma.holidays.create({
@@ -42,16 +20,14 @@ export async function POST(request) {
     }
 }
 
-/**
- *
- * @param request
- * @returns {Promise<void>}
- * @constructor
- */
-export async function GET(request) {
+export const POST = withAuth(calendarPost, 'page:calendar:create');
+
+async function calendarGet(request, context, { user, payload }) {
     const holidays = await prisma.holidays.findMany({
         include: {userId: true}
     });
+
     return NextResponse.json(holidays);
 }
 
+export const GET = withAuth(calendarGet, 'page:calendar:view');

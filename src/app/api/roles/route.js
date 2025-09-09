@@ -1,8 +1,8 @@
-import { withAuthorization } from "@/app/lib/authentication.js";
 import { NextResponse } from "next/server";
+import { withAuth } from "@/lib/auth/wrappers.js";
 
-const handler = async (body, context, user) => {
-    const { roleName, list } = body;
+const handler = async (request, context, {user}) => {
+    const { roleName, list } = await request.json();
 
     try {
         const createRoleData = await prisma.roles.create({
@@ -27,4 +27,4 @@ const handler = async (body, context, user) => {
     }
 }
 
-export const POST = withAuthorization(handler, 'roles:create');
+export const POST = withAuth(handler, 'admin:roles:create');

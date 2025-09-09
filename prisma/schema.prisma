@@ -19,6 +19,7 @@ model permissions {
   id             Int                @id @unique @default(autoincrement())
   name           String             @unique
   base           Boolean            @default(false)
+  group          String             @default("page")
   roles          roles[]
   RolePermission role_permissions[]
 }

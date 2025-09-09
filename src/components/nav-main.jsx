@@ -1,6 +1,6 @@
 "use client"
 
-import { IconCirclePlusFilled, IconMail } from "@tabler/icons-react";
+import { IconCalendar, IconCirclePlusFilled, IconDashboard, IconMail, IconReport } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -31,17 +31,33 @@ export function NavMain({ items }) {
                     </SidebarMenuItem>
                 </SidebarMenu>
                 <SidebarMenu>
-                    {items.map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                            <Link href={item.url}>
-                                <SidebarMenuButton isActive={isActive(item.url)}  tooltip={item.title}>
+                    <SidebarMenuItem>
+                        <Link href='/'>
+                            <SidebarMenuButton isActive={isActive('/')}  tooltip='Dashboard'>
+                                <IconDashboard />
+                                <span>Dashboard</span>
+                            </SidebarMenuButton>
+                        </Link>
+                    </SidebarMenuItem>
 
-                                    {item.icon && <item.icon/>}
-                                    <span>{item.title}</span>
-                                </SidebarMenuButton>
-                            </Link>
-                        </SidebarMenuItem>
-                    ))}
+                    <SidebarMenuItem>
+                        <Link href='/calendar'>
+                            <SidebarMenuButton isActive={isActive('/calendar')}  tooltip='Calendar'>
+                                <IconCalendar />
+                                <span>Calendar</span>
+                            </SidebarMenuButton>
+                        </Link>
+                    </SidebarMenuItem>
+
+                    <SidebarMenuItem>
+                        <Link href='/reports'>
+                            <SidebarMenuButton isActive={isActive('/reports')}  tooltip='Reports'>
+                                <IconReport />
+                                <span>Reports</span>
+                            </SidebarMenuButton>
+                        </Link>
+                    </SidebarMenuItem>
+
                 </SidebarMenu>
             </SidebarGroupContent>
         </SidebarGroup>

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma.js";
+import { withAuth } from "@/lib/auth/wrappers.js";
 
-export async function PATCH(request, { params }) {
+async function patchUser(request, { params }) {
     const { id } = await params;
     const { permission, checked } = await request.json();
 
@@ -24,7 +25,9 @@ export async function PATCH(request, { params }) {
     }
 }
 
-export async function DELETE(request, { params }) {
+export const PATCH = withAuth(patchUser, 'admin:users:modify');
+
+async function deleteUser(request, { params }) {
     const { id } = await params;
 
     try {
@@ -42,3 +45,5 @@ export async function DELETE(request, { params }) {
     }
 
 }
+
+export const DELETE = withAuth(deleteUser, 'admin:users:delete');

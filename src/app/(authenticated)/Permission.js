@@ -1,8 +1,8 @@
-import { checkAuthentication } from "@/app/lib/authentication.js";
 import prisma from "@/app/lib/prisma.js";
+import { authenticate } from "@/lib/auth/core.js";
 
 export default async function Permission({ permission, children }) {
-    const { payload } = await checkAuthentication();
+    const { user, payload } = await authenticate();
 
     if (!payload) {
         return (

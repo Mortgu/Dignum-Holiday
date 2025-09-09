@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { withAuthorization } from "@/app/lib/authentication.js";
 import prisma from "@/app/lib/prisma.js";
 
 import bcrypt from 'bcryptjs';
+import { withAuth } from "@/lib/auth/wrappers.js";
 
 /** CREATING USERS | [POST] /api/users/ */
-const createUser = async (body, context, user) => {
+const createUser = async (body, context, { user, payload }) => {
     const fields = await body.json();
     console.log(fields);
 
@@ -36,9 +36,9 @@ const createUser = async (body, context, user) => {
     }
 }
 
-export const POST = withAuthorization(createUser, 'users:create');
+export const POST = withAuth(createUser, 'admin:users:create');
 
-const getUsers = async (body, context, user) => {
+const getUsers = async (body, context, { user, payload }) => {
     try {
         const users = await prisma.users.findMany({
             include: {roleRelation: true}, where: { system: false }
@@ -52,4 +52,4 @@ const getUsers = async (body, context, user) => {
     }
 }
 
-export const GET = withAuthorization(getUsers, 'users:view');
+export const GET = withAuth(getUsers, 'admin:users:view');

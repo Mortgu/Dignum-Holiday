@@ -1,6 +1,6 @@
 import { Modal } from "@/components/modal/modal.js";
 
-import { CreateUserForm } from "@/app/(authenticated)/settings/@modal/(.)admin/users/create/create-form.js";
+import { CreateUserForm } from "@/app/(authenticated)/admin/@modal/(.)users/create/create-form.js";
 import prisma from "@/app/lib/prisma.js";
 import { parseAuthCookie, verifyToken } from "@/app/utils/jwt.js";
 import { headers } from "next/headers";

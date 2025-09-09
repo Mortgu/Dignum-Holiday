@@ -11,19 +11,17 @@ export async function POST(request) {
 
     email = email.toLowerCase();
 
-    const users = await prisma.users.findMany({
+    const user = await prisma.users.findFirst({
         where: {email: email}, include: {
             roleRelation: true
         }
     });
 
-    if (users.length === 0) {
+    if (!user) {
         return NextResponse.json({
             error: 'User dose not exists!'
         }, {status: 401});
     }
-
-    const user = users[0];
 
     const isPasswordValid = await compare(password, user.password);
 
@@ -33,12 +31,19 @@ export async function POST(request) {
         }, {status: 401});
     }
 
+    let permissions = await prisma.role_permissions.findMany({
+        where: { role: user.role }, include: { permissionRelation: true },
+    });
+
+    permissions = permissions.map(permission => permission.permissionRelation.name);
+
     const token = await new SignJWT({
         uid: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.roleRelation
+        role: user.roleRelation,
+        permissions: permissions,
     }).setProtectedHeader({alg: 'HS256'})
         .setIssuedAt().setIssuer(process.env.JWT_ISSUER)
         .setAudience(process.env.JWT_AUDIENCE)

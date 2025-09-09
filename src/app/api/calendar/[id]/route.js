@@ -1,7 +1,8 @@
 import prisma from "@/app/lib/prisma.js";
 import { NextResponse } from "next/server";
+import { withAuth } from "@/lib/auth/wrappers.js";
 
-export async function POST(request, { params }) {
+async function deleteEntry(request, { params }) {
     const { id } = await params;
 
     try {
@@ -16,3 +17,5 @@ export async function POST(request, { params }) {
         });
     }
 }
+
+export const DELETE = withAuth(deleteEntry, 'pages:calendar:delete');

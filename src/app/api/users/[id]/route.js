@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
+import { withAuth } from "@/lib/auth/wrappers.js";
+
 import prisma from "@/app/lib/prisma.js";
-import { checkPermission } from "@/app/lib/permissions.js";
-import { checkAuthentication, withAuthorization } from "@/app/lib/authentication.js";
 
 /** MODIFY USER | [POST] /api/users/[id] */
 const modifyUser = async (body, context, user) => {
@@ -24,7 +24,7 @@ const modifyUser = async (body, context, user) => {
     }
 }
 
-export const POST = withAuthorization(modifyUser, 'users:modify');
+export const POST = withAuth(modifyUser, 'admin:users:modify');
 
 const getUser = async (body, context, user) => {
     const { id } = await context.params;
@@ -42,7 +42,7 @@ const getUser = async (body, context, user) => {
     }
 }
 
-export const GET = withAuthorization(getUser, 'users:view');
+export const GET = withAuth(getUser, 'admin:users:view');
 
 
 const deleteUser = async (body, context, user) => {
@@ -61,4 +61,4 @@ const deleteUser = async (body, context, user) => {
     }
 }
 
-export const DELETE = withAuthorization(deleteUser, 'users:delete');
+export const DELETE = withAuth(deleteUser, 'admin:users:delete');

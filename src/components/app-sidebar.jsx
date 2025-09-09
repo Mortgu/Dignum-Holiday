@@ -1,26 +1,13 @@
-"use client"
-
 import * as React from "react"
 import {
     IconCalendar,
-    IconCamera,
-    IconChartBar,
     IconDashboard,
-    IconDatabase,
-    IconFileAi,
-    IconFileDescription,
-    IconFileWord,
-    IconFolder,
-    IconHelp,
-    IconInnerShadowTop,
-    IconListDetails, IconPaperclip,
+    IconPaperclip,
     IconReport,
-    IconSearch,
     IconSettings,
     IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
@@ -36,41 +23,29 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible.jsx";
 import { ChevronDown } from "@mynaui/icons-react";
 import Link from "next/link";
+import Permission from "@/app/(authenticated)/Permission.js";
+import prisma from "@/app/lib/prisma.js";
+import { authenticate } from "@/lib/auth/core.js";
 
-const data = {
-    user: {
-        name: "Dignum",
-        email: "dignum@dignum.de",
-        avatar: "/avatars/shadcn.jpg",
-    },
-    navMain: [
-        {
-            title: "Dashboard",
-            url: "/",
-            icon: IconDashboard,
-        },
-        {
-            title: "Calendar",
-            url: "/calendar",
-            icon: IconCalendar,
-        },
-        {
-            title: "Reports",
-            url: "/reports",
-            icon: IconReport,
-        },
-    ],
+export async function AppSidebar({ ...props }) {
+    const { user, payload } = await authenticate();
 
-    navSecondary: [
-        {
-            title: "Settings",
-            url: "/settings",
-            icon: IconSettings,
-        },
-    ],
-}
+    const getPermissions = async () => {
+        let permissions = await prisma.role_permissions.findMany({
+            where: { role: user.role }, include: { permissionRelation: true },
+        });
 
-export function AppSidebar({ ...props }) {
+        permissions = permissions.map(permission => permission.permissionRelation.name);
+        return permissions;
+    }
+
+    const hasAdminPermission = () => {
+        return getPermissions().then(permissions => {
+            return permissions.filter(permission => {
+                return permission.split(':')[0] === 'admin'
+            }).length > 0;
+        });
+    }
 
     return (
         <Sidebar collapsible="offcanvas" {...props}>
@@ -86,53 +61,57 @@ export function AppSidebar({ ...props }) {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={data.navMain}/>
+                {/* <NavMain items={data.navMain}/> */}
+                <NavMain />
 
-                <SidebarMenu>
-                    <Collapsible defaultOpen className="group/collapsible">
-                        <SidebarMenuItem>
-                            <CollapsibleTrigger asChild>
-                                <SidebarMenuButton>
-                                    <IconSettings /> Administration
-                                    <ChevronDown className="ml-auto" />
-                                </SidebarMenuButton>
-                            </CollapsibleTrigger>
-                            <CollapsibleContent>
-                                <SidebarMenuSub>
-                                    <SidebarMenuSubItem>
-                                        <SidebarMenuButton asChild>
-                                            <Link href='/settings/admin'>
-                                                <IconUsers />
-                                                General
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuSubItem>
-                                    <SidebarMenuSubItem>
-                                        <SidebarMenuButton asChild>
-                                            <Link href='/settings/admin/users'>
-                                                <IconUsers />
-                                                Users
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuSubItem>
-                                    <SidebarMenuSubItem>
-                                        <SidebarMenuButton asChild>
-                                            <Link href='/settings/admin/roles'>
-                                                <IconPaperclip />
-                                                Roles
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuSubItem>
-                                </SidebarMenuSub>
-                            </CollapsibleContent>
-                        </SidebarMenuItem>
-                    </Collapsible>
-                </SidebarMenu>
+                {await hasAdminPermission() && (
+                    <SidebarMenu>
+                        <Collapsible defaultOpen className="group/collapsible">
+                            <SidebarMenuItem>
 
-                <NavSecondary items={data.navSecondary} className="mt-auto"/>
+                                <CollapsibleTrigger asChild>
+                                    <SidebarMenuButton>
+                                        <IconSettings /> Administration
+                                        <ChevronDown className="ml-auto" />
+                                    </SidebarMenuButton>
+                                </CollapsibleTrigger>
+
+                                <CollapsibleContent>
+                                    <SidebarMenuSub>
+
+                                        <Permission permission='admin:users:view'>
+                                            <SidebarMenuSubItem>
+                                                <SidebarMenuButton asChild>
+                                                    <Link href='/admin/users'>
+                                                        <IconUsers />
+                                                        Users
+                                                    </Link>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuSubItem>
+                                        </Permission>
+
+                                        <Permission permission='admin:roles:view'>
+                                            <SidebarMenuSubItem>
+                                                <SidebarMenuButton asChild>
+                                                    <Link href='/admin/roles'>
+                                                        <IconPaperclip />
+                                                        Roles
+                                                    </Link>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuSubItem>
+                                        </Permission>
+
+                                    </SidebarMenuSub>
+                                </CollapsibleContent>
+                            </SidebarMenuItem>
+                        </Collapsible>
+                    </SidebarMenu>
+                )}
+
+                {/* <NavSecondary items={data.navSecondary} className="mt-auto"/> */}
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user}/>
+                {/* <NavUser /> */}
             </SidebarFooter>
         </Sidebar>
     );

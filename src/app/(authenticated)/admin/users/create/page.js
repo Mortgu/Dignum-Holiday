@@ -1,5 +1,4 @@
-import { UserCreationForm } from "@/components/settings/users.js";
-import { CreateUserForm } from "@/app/(authenticated)/settings/@modal/(.)admin/users/create/create-form.js";
+import { CreateUserForm } from "@/app/(authenticated)/admin/@modal/(.)users/create/create-form.js";
 import prisma from "@/app/lib/prisma.js";
 
 export default async function Page({ children }) {
